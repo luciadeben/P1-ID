@@ -1,0 +1,9 @@
+gei\id\tutelado\model\Usuario.class
+gei\id\tutelado\App.class
+gei\id\tutelado\dao\UsuarioDao.class
+gei\id\tutelado\configuracion\Configuracion.class
+gei\id\tutelado\model\EntradaLog.class
+gei\id\tutelado\dao\UsuarioDaoJPA.class
+gei\id\tutelado\configuracion\ConfiguracionJPA.class
+gei\id\tutelado\dao\EntradaLogDao.class
+gei\id\tutelado\dao\EntradaLogDaoJPA.class
