@@ -6,7 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 @TableGenerator(name="xeradorIdsUsuarios", table="taboa_ids",
-pkColumnName="nome_id", pkColumnValue="idUsuario",
+pkColumnName="nombre_id", pkColumnValue="idUsuario",
 valueColumnName="ultimo_valor_id",
 initialValue=0, allocationSize=1)
 

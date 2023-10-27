@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @TableGenerator(name="xeradorIdsEntradas", table="taboa_ids",
-pkColumnName="nome_id", pkColumnValue="idEntradaLog",
+pkColumnName="nombre_id", pkColumnValue="idEntradaLog",
 valueColumnName="ultimo_valor_id",
 initialValue=0, allocationSize=1)
 

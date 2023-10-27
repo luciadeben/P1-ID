@@ -25,7 +25,9 @@ public class ProdutorDatosProba {
 	
 	public EntradaLog e1A, e1B;
 	public List<EntradaLog> listaxeE;
-	
+
+	public Empleado e0, e1;
+	public List<Empleado> listaE;
 	
 	
 	public void Setup (Configuracion config) {
@@ -50,6 +52,49 @@ public class ProdutorDatosProba {
         this.listaxeU = new ArrayList<Usuario> ();
         this.listaxeU.add(0,u0);
         this.listaxeU.add(1,u1);        
+
+	}
+
+	public void creaEmpleados() {
+
+		// Crea dos empleados EN MEMORIA: e0, e1
+		
+		this.e0 = new Empleado();
+        this.e0.setNif("000A");
+        this.e0.setNombre("Empleado cero");
+		this.e0.setApellidos("Gomez Pedreira");
+		this.e0.setTelefono("610692944");
+		this.e0.setFechaNacimiento(LocalDate.of(1992, 06, 02));
+		this.e0.setGenero("Mujer");
+		this.e0.setDireccion("Rua de las Flores, 2");
+
+		this.e0.setNss("000123");
+		this.e0.setSalario(1500.00);
+		this.e0.setPuesto("supervisor");
+		this.e0.setFechaContratacion(LocalDate.of(2010, 02, 10));
+		this.e0.setExperiencia(13);
+		this.e0.setHorario("8:00 a 12:00 - 16:00 a 20:00");
+
+
+		this.e1 = new Empleado();
+        this.e1.setNif("000B");
+        this.e1.setNombre("Empleado uno");
+		this.e1.setApellidos("Santos del Carmen");
+		this.e1.setTelefono("610001202");
+		this.e1.setFechaNacimiento(LocalDate.of(1990, 02, 9));
+		this.e1.setGenero("Hombre");
+		this.e1.setDireccion("Avenida de Jose Luis Perales, 35");
+		
+		this.e1.setNss("123456");
+		this.e1.setSalario(1200.00);
+		this.e1.setPuesto("cocinero");
+		this.e1.setFechaContratacion(LocalDate.of(2020, 02, 21));
+		this.e1.setExperiencia(20);
+		this.e0.setHorario("22:00 a 06:00");
+
+        this.listaE = new ArrayList<Empleado> ();
+        this.listaE.add(0,e0);
+        this.listaE.add(1,e1);        
 
 	}
 	
@@ -112,6 +157,35 @@ public class ProdutorDatosProba {
 			}
 		}	
 	}
+
+	public void gravaEmpleados() {
+		EntityManager em=null;
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			Iterator<Empleado> itE = this.listaE.iterator();
+			while (itE.hasNext()) {
+				Empleado e = itE.next();
+				em.persist(e);
+				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
+				/*
+				Iterator<EntradaLog> itEL = u.getEntradasLog().iterator();
+				while (itEL.hasNext()) {
+					em.persist(itEL.next());
+				}
+				*/
+			}
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw (e);
+			}
+		}	
+	}
 	
 	public void limpaBD () {
 		EntityManager em=null;
@@ -123,10 +197,13 @@ public class ProdutorDatosProba {
 			while (itU.hasNext()) em.remove(itU.next());
 			Iterator <EntradaLog> itL = em.createNamedQuery("EntradaLog.recuperaTodas", EntradaLog.class).getResultList().iterator();
 			while (itL.hasNext()) em.remove(itL.next());		
+			Iterator <Empleado> itE = em.createNamedQuery("Empleado.recuperaTodos", Empleado.class).getResultList().iterator();
+			while (itE.hasNext()) em.remove(itE.next());			
 
 			
-			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idUsuario'" ).executeUpdate();
-			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nome_id='idEntradaLog'" ).executeUpdate();
+			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idUsuario'" ).executeUpdate();
+			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idEntradaLog'" ).executeUpdate();
+			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idPersona'" ).executeUpdate();
 
 			em.getTransaction().commit();
 			em.close();
