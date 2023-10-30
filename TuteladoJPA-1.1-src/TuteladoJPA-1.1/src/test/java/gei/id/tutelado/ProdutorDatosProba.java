@@ -28,6 +28,13 @@ public class ProdutorDatosProba {
 
 	public Empleado e0, e1;
 	public List<Empleado> listaE;
+
+	public Residente r0, r1;
+	public List<Residente> listaR;
+
+	public Habitacion h0, h1;
+	public List<Habitacion> listaH;
+	
 	
 	
 	public void Setup (Configuracion config) {
@@ -97,7 +104,75 @@ public class ProdutorDatosProba {
         this.listaE.add(1,e1);        
 
 	}
-	
+
+	public void creaResidentes() {
+
+		// Crea dos residentes EN MEMORIA: r0, r1
+		
+		this.r0 = new Residente();
+        this.r0.setNif("010V");
+        this.r0.setNombre("Residente cero");
+		this.r0.setApellidos("Lechuga Esparrago");
+		this.r0.setTelefono("623423986");
+		this.r0.setFechaNacimiento(LocalDate.of(2000, 03, 02));
+		this.r0.setGenero("Mujer");
+		this.r0.setDireccion("Rua de las Cuevas, 6");
+
+		this.r0.setFechaIngreso(LocalDate.of(2008, 02, 10));
+		this.r0.setEstadosalud("delicado");
+		this.r0.setContactosEmergencia("686465736, 653489234, 676456345");
+		this.r0.setHabitacion(h0);
+
+
+		this.r1 = new Residente ();
+        this.r1.setNif("044C");
+        this.r1.setNombre("Residente uno");
+		this.r1.setApellidos("Amigo Bueno");
+		this.r1.setTelefono("644567432");
+		this.r1.setFechaNacimiento(LocalDate.of(1995, 02, 7));
+		this.r1.setGenero("Hombre");
+		this.r1.setDireccion("Avenida de Buenos Aires, 12");
+		
+		this.r1.setFechaIngreso(LocalDate.of(2008, 02, 10))
+		this.r1.setEstadosalud("excelente");
+		this.r1.setContactosEmergencia("678654372,689976531");
+		this.r1.setHabitacion(h7);
+
+        this.listaR = new ArrayList<Residente> ();
+        this.listaR.add(0,r0);
+        this.listaR.add(1,r1);        
+
+	}
+
+
+	public void creaHabitaciones() {
+
+		// Crea dos habitaciones EN MEMORIA: h0, h1
+
+		this.h0.setNumero(2);
+		this.h0.setPlanta(3);
+		this.h0.setCapacidad(3);
+		this.h0.setTipo("compartida");
+		this.h0.setEmpleado(empleado3);
+		this.h0.setResidente(residente3);
+		this.h0.setEstado("ocupada");
+
+		this.h0.setNumero(8);
+		this.h0.setPlanta(2);
+		this.h0.setCapacidad(1);
+		this.h0.setTipo("individual");
+		this.h0.setEmpleado("empleado2");
+		this.h0.setResidente(residente3);
+		this.h0.setEstado("disponible");
+
+        this.listaH = new ArrayList<Habitacion> ();
+        this.listaH.add(0,h0);
+        this.listaH.add(1,h1);        
+
+	}
+
+
+
 	public void creaEntradasLogSoltas () {
 
 		// Crea duas entradas de log EN MEMORIA: e1a, e1b
@@ -186,6 +261,35 @@ public class ProdutorDatosProba {
 			}
 		}	
 	}
+
+	public void gravaResidentes() {
+		EntityManager em=null;
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			Iterator<Residente> itR = this.listaR.iterator();
+			while (itR.hasNext()) {
+				Residente r = itR.next();
+				em.persist(r);
+				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
+				/*
+				Iterator<EntradaLog> itEL = u.getEntradasLog().iterator();
+				while (itRL.hasNext()) {
+					em.persist(itRL.next());
+				}
+				*/
+			}
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw (e);
+			}
+		}	
+	}
 	
 	public void limpaBD () {
 		EntityManager em=null;
@@ -198,6 +302,8 @@ public class ProdutorDatosProba {
 			Iterator <EntradaLog> itL = em.createNamedQuery("EntradaLog.recuperaTodas", EntradaLog.class).getResultList().iterator();
 			while (itL.hasNext()) em.remove(itL.next());		
 			Iterator <Empleado> itE = em.createNamedQuery("Empleado.recuperaTodos", Empleado.class).getResultList().iterator();
+			while (itE.hasNext()) em.remove(itE.next());
+			Iterator <Residente> itR = em.createNamedQuery("Residente.recuperaTodos", Residente.class).getResultList().iterator();
 			while (itE.hasNext()) em.remove(itE.next());			
 
 			
