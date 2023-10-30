@@ -2,7 +2,10 @@ package gei.id.tutelado.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import gei.id.tutelado.model.Habitacion;
+import java.util.List;
+
+rl.Residente;
+import net.bytebuddy.asm.Advice.Local;
 
 @NamedQueries ({
         @NamedQuery (name="Residente.recuperaPorNif",
@@ -17,7 +20,7 @@ import gei.id.tutelado.model.Habitacion;
 public class Residente extends Persona {
 
     @Column(nullable = false, unique = false)
-    private date fecha_ingreso;
+    private LocalDate fecha_ingreso;
 
     @Column(nullable = false, unique=false)
     private String estadoSalud;
@@ -29,12 +32,12 @@ public class Residente extends Persona {
     private Habitacion habitacion;
 
 
-    public date getFechaIngreso() {
+    public LocalDate getFechaIngreso() {
         return fecha_ingreso;
     }
 
 
-    public void setFechaIngreso(date fecha_ingreso) {
+    public void setFechaIngreso(LocalDate fecha_ingreso) {
         this.fecha_ingreso = fecha_ingreso;
     }
 
