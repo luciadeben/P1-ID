@@ -1,7 +1,7 @@
 package gei.id.tutelado.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Set;
 
 
 @NamedQueries ({
@@ -32,10 +32,10 @@ public class Habitacion {
     private String tipo;
 
     @Column(nullable = false, unique=false)
-    private set<Empleados> empleado ;
+    private Set<Empleado> empleados;
 
     @Column(nullable = false, unique=true)
-    private set<Residente> residente ;
+    private Set<Residente> residentes;
 
     @Column(nullable = false, unique=false)
     private String estado;
@@ -75,16 +75,16 @@ public class Habitacion {
         this.tipo = tipo;
     }
 
-    public set<Empleados> getEmpleado() {return empleado;}
+    public Set<Empleado> getEmpleado() {return empleados;}
 
-    public void setEmpleado(set<empleados> empleado) {
-        this.empleado = empleado;
+    public void setEmpleado(Set<Empleado> empleados) {
+        this.empleados = empleados;
     }
 
-    public set<Residente> getResidente() {return residente;}
+    public Set<Residente> getResidente() {return residentes;}
 
-    public void setResidente(set<Residente> residente) {
-        this.residente = residente;
+    public void setResidente(Set<Residente> residentes) {
+        this.residentes = residentes;
     }
 
     public String getEstado() {
@@ -98,7 +98,7 @@ public class Habitacion {
 
     @Override
     public String toString() {
-        return "Habitacion [numero=" + numero + ", planta=" + planta + ", capacidad=" + capacidad + ", tipo=" + tipo + ", empleado=" + empleado + ", residente=" + residente + ", estado=" + estado "]";
+        return "Habitacion [numero=" + numero + ", planta=" + planta + ", capacidad=" + capacidad + ", tipo=" + tipo + ", empleado=" + empleados + ", residente=" + residentes + ", estado=" + estado + "]";
     }
 
 

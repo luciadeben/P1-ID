@@ -4,9 +4,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-rl.Residente;
-import net.bytebuddy.asm.Advice.Local;
-
 @NamedQueries ({
         @NamedQuery (name="Residente.recuperaPorNif",
                 query="SELECT r FROM Residente r where r.nif=:nif"),

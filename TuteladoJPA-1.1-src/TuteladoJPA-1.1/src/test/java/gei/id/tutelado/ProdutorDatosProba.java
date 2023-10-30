@@ -34,6 +34,8 @@ public class ProdutorDatosProba {
 
 	public Habitacion h0, h1;
 	public List<Habitacion> listaH;
+
+	public List<String> contactos;
 	
 	
 	
@@ -60,6 +62,13 @@ public class ProdutorDatosProba {
         this.listaxeU.add(0,u0);
         this.listaxeU.add(1,u1);        
 
+	}
+	
+	public void listaContactos(){
+		this.contactos = new ArrayList<>();
+		contactos.add("686465736");
+		contactos.add("653489234"); 
+		contactos.add("676456345");
 	}
 
 	public void creaEmpleados() {
@@ -108,6 +117,7 @@ public class ProdutorDatosProba {
 	public void creaResidentes() {
 
 		// Crea dos residentes EN MEMORIA: r0, r1
+		creaHabitaciones();
 		
 		this.r0 = new Residente();
         this.r0.setNif("010V");
@@ -120,7 +130,8 @@ public class ProdutorDatosProba {
 
 		this.r0.setFechaIngreso(LocalDate.of(2008, 02, 10));
 		this.r0.setEstadosalud("delicado");
-		this.r0.setContactosEmergencia("686465736, 653489234, 676456345");
+		listaContactos();
+		this.r0.setContactosEmergencia(contactos);
 		this.r0.setHabitacion(h0);
 
 
@@ -133,10 +144,10 @@ public class ProdutorDatosProba {
 		this.r1.setGenero("Hombre");
 		this.r1.setDireccion("Avenida de Buenos Aires, 12");
 		
-		this.r1.setFechaIngreso(LocalDate.of(2008, 02, 10))
+		this.r1.setFechaIngreso(LocalDate.of(2008, 02, 10));
 		this.r1.setEstadosalud("excelente");
-		this.r1.setContactosEmergencia("678654372,689976531");
-		this.r1.setHabitacion(h7);
+		this.r1.setContactosEmergencia(contactos);
+		this.r1.setHabitacion(h1);
 
         this.listaR = new ArrayList<Residente> ();
         this.listaR.add(0,r0);
@@ -153,8 +164,8 @@ public class ProdutorDatosProba {
 		this.h0.setPlanta(3);
 		this.h0.setCapacidad(3);
 		this.h0.setTipo("compartida");
-		this.h0.setEmpleado(empleado3);
-		this.h0.setResidente(residente3);
+		this.h0.setEmpleado(e1);
+		this.h0.setResidente(r1);
 		this.h0.setEstado("ocupada");
 
 		this.h0.setNumero(8);

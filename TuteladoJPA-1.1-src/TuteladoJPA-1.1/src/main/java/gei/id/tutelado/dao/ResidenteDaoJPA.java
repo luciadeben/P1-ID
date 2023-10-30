@@ -89,7 +89,7 @@ public class ResidenteDaoJPA implements ResidenteDao {
 
 
     @Override
-    public residente recuperaPorNif(String nif) {
+    public Residente recuperaPorNif(String nif) {
         List <Residente> residentes=null;
 
         try {
@@ -121,7 +121,7 @@ public class ResidenteDaoJPA implements ResidenteDao {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            residentes = em.createNamedQuery("Residente.recuperaTodos", residente.class).getResultList();
+            residentes = em.createNamedQuery("Residente.recuperaTodos", Residente.class).getResultList();
 
             em.getTransaction().commit();
             em.close();

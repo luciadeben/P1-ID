@@ -89,7 +89,7 @@ public class HabitacionDaoJPA implements HabitacionDao {
 
 
     @Override
-    public habitacion recuperaPorNumero(int numero) {
+    public Habitacion recuperaPorNumero(int numero) {
         List <Habitacion> habitaciones=null;
 
         try {
