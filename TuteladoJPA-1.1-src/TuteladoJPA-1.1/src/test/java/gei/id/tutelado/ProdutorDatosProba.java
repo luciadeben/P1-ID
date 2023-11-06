@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,7 +38,8 @@ public class ProdutorDatosProba {
 
 	public List<String> contactos;
 	
-	
+	Set<Empleado> empleados;
+	Set<Residente> residentes;
 	
 	public void Setup (Configuracion config) {
 		this.emf=(EntityManagerFactory) config.get("EMF");
@@ -132,7 +134,8 @@ public class ProdutorDatosProba {
 		this.r0.setEstadosalud("delicado");
 		listaContactos();
 		this.r0.setContactosEmergencia(contactos);
-		this.r0.setHabitacion(h0);
+		//this.r0.setHabitacion(h0);
+		this.r0.setHabitacion(0);
 
 
 		this.r1 = new Residente ();
@@ -147,7 +150,8 @@ public class ProdutorDatosProba {
 		this.r1.setFechaIngreso(LocalDate.of(2008, 02, 10));
 		this.r1.setEstadosalud("excelente");
 		this.r1.setContactosEmergencia(contactos);
-		this.r1.setHabitacion(h1);
+		//this.r1.setHabitacion(h1);
+		this.r1.setHabitacion(1);
 
         this.listaR = new ArrayList<Residente> ();
         this.listaR.add(0,r0);
@@ -160,21 +164,32 @@ public class ProdutorDatosProba {
 
 		// Crea dos habitaciones EN MEMORIA: h0, h1
 
+		this.h0 = new Habitacion();
 		this.h0.setNumero(2);
 		this.h0.setPlanta(3);
 		this.h0.setCapacidad(3);
 		this.h0.setTipo("compartida");
-		this.h0.setEmpleado(e1);
-		this.h0.setResidente(r1);
+		//empleados.add(e1);
+		//this.h0.setEmpleado(empleados);
+		this.h0.setEmpleado("empleado 1, empleado 2");
+		//residentes.add(r1);
+		//this.h0.setResidente(residentes);
+		this.h0.setResidente("residente 1, residente 2");
 		this.h0.setEstado("ocupada");
 
-		this.h0.setNumero(8);
-		this.h0.setPlanta(2);
-		this.h0.setCapacidad(1);
-		this.h0.setTipo("individual");
-		this.h0.setEmpleado("empleado2");
-		this.h0.setResidente(residente3);
-		this.h0.setEstado("disponible");
+		this.h1 = new Habitacion();
+		this.h1.setNumero(8);
+		this.h1.setPlanta(2);
+		this.h1.setCapacidad(1);
+		this.h1.setTipo("individual");
+		//empleados.add(e0);
+		//this.h1.setEmpleado(empleados);
+		this.h1.setEmpleado("empleado 1");
+		//residentes.add(r0);
+		//residentes.remove(r1);
+		//this.h1.setResidente(residentes);
+		this.h1.setResidente("residente 3");
+		this.h1.setEstado("disponible");
 
         this.listaH = new ArrayList<Habitacion> ();
         this.listaH.add(0,h0);
@@ -301,6 +316,35 @@ public class ProdutorDatosProba {
 			}
 		}	
 	}
+
+	public void gravaHabitaciones() {
+		EntityManager em=null;
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			Iterator<Habitacion> itH = this.listaH.iterator();
+			while (itH.hasNext()) {
+				Habitacion h = itH.next();
+				em.persist(h);
+				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
+				/*
+				Iterator<EntradaLog> itEL = u.getEntradasLog().iterator();
+				while (itRL.hasNext()) {
+					em.persist(itRL.next());
+				}
+				*/
+			}
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw (e);
+			}
+		}	
+	}
 	
 	public void limpaBD () {
 		EntityManager em=null;
@@ -315,12 +359,15 @@ public class ProdutorDatosProba {
 			Iterator <Empleado> itE = em.createNamedQuery("Empleado.recuperaTodos", Empleado.class).getResultList().iterator();
 			while (itE.hasNext()) em.remove(itE.next());
 			Iterator <Residente> itR = em.createNamedQuery("Residente.recuperaTodos", Residente.class).getResultList().iterator();
-			while (itE.hasNext()) em.remove(itE.next());			
+			while (itR.hasNext()) em.remove(itR.next());
+			Iterator <Habitacion> itH = em.createNamedQuery("Habitacion.recuperaTodos", Habitacion.class).getResultList().iterator();
+			while (itH.hasNext()) em.remove(itH.next());			
 
 			
 			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idUsuario'" ).executeUpdate();
 			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idEntradaLog'" ).executeUpdate();
 			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idPersona'" ).executeUpdate();
+			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idHabitacion'" ).executeUpdate();
 
 			em.getTransaction().commit();
 			em.close();

@@ -8,7 +8,7 @@ import java.util.List;
         @NamedQuery (name="Residente.recuperaPorNif",
                 query="SELECT r FROM Residente r where r.nif=:nif"),
         @NamedQuery (name="Residente.recuperaTodos",
-                query="SELECT r FROM Residente e ORDER BY r.nif")
+                query="SELECT r FROM Residente r ORDER BY r.nif")
 })
 
 @Entity
@@ -22,11 +22,15 @@ public class Residente extends Persona {
     @Column(nullable = false, unique=false)
     private String estadoSalud;
 
-    @Column(nullable = false, unique=false)
+
+    @ElementCollection
+    @CollectionTable(name = "TelefonosContacto", joinColumns = @JoinColumn(name = "residente_id"))
+    @Column(name = "telefono")
     private List<String> contactosEmergencia;
 
     @Column(nullable = false, unique=false)
-    private Habitacion habitacion;
+    //private Habitacion habitacion;
+    private int habitacion;
 
 
     public LocalDate getFechaIngreso() {
@@ -59,15 +63,21 @@ public class Residente extends Persona {
     }
 
 
-    public Habitacion getHabitacion() {
+    /*public Habitacion getHabitacion() {
         return habitacion;
     }
 
     public void setHabitacion(Habitacion habitacion) {
         this.habitacion = habitacion;
+    }*/
+
+    public int getHabitacion() {
+        return habitacion;
     }
 
-
+    public void setHabitacion(int habitacion) {
+        this.habitacion = habitacion;
+    }
 
     @Override
     public String toString() {

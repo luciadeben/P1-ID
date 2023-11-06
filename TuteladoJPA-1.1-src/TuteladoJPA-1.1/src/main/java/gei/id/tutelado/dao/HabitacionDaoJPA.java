@@ -45,7 +45,6 @@ public class HabitacionDaoJPA implements HabitacionDao {
     public Habitacion modifica(Habitacion habitacion) {
 
         try {
-
             em = emf.createEntityManager();
             em.getTransaction().begin();
 

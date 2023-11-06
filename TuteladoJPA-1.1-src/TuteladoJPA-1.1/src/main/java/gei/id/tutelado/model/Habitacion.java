@@ -1,8 +1,12 @@
 package gei.id.tutelado.model;
 
 import javax.persistence.*;
-import java.util.Set;
+//import java.util.Set;
 
+@TableGenerator(name="xeradorIdsHabitaciones", table="taboa_ids",
+pkColumnName="nombre_id", pkColumnValue="idHabitacion",
+valueColumnName="ultimo_valor_id",
+initialValue=0, allocationSize=1)
 
 @NamedQueries ({
         @NamedQuery (name="Habitacion.recuperaPorNumero",
@@ -32,10 +36,12 @@ public class Habitacion {
     private String tipo;
 
     @Column(nullable = false, unique=false)
-    private Set<Empleado> empleados;
+    //private Set<Empleado> empleados;
+    private String empleados;
 
     @Column(nullable = false, unique=true)
-    private Set<Residente> residentes;
+    //private Set<Residente> residentes;
+    private String residentes;
 
     @Column(nullable = false, unique=false)
     private String estado;
@@ -75,15 +81,25 @@ public class Habitacion {
         this.tipo = tipo;
     }
 
-    public Set<Empleado> getEmpleado() {return empleados;}
+    //public Set<Empleado> getEmpleado() {return empleados;}
+    public String getEmpleado() {return empleados;}
 
-    public void setEmpleado(Set<Empleado> empleados) {
+    /*public void setEmpleado(Set<Empleado> empleados) {
+        this.empleados = empleados;
+    }*/
+
+    public void setEmpleado(String empleados) {
         this.empleados = empleados;
     }
 
-    public Set<Residente> getResidente() {return residentes;}
+    //public Set<Residente> getResidente() {return residentes;}
+    public String getResidente() {return residentes;}
 
-    public void setResidente(Set<Residente> residentes) {
+    /*public void setResidente(Set<Residente> residentes) {
+        this.residentes = residentes;
+    }*/
+
+    public void setResidente(String residentes) {
         this.residentes = residentes;
     }
 

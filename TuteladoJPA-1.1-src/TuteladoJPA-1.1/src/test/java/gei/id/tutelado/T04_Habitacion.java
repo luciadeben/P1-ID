@@ -86,7 +86,7 @@ public class T04_Habitacion {
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
 
         produtorDatos.creaHabitaciones();
-        produtorDatos.gravaHabitaciones();
+        //produtorDatos.gravaHabitaciones();
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
@@ -163,7 +163,7 @@ public class T04_Habitacion {
     public void test04_Modificacion() {
 
         Habitacion h1, h2;
-        int nuevoNumero;
+        int nuevaplanta;
 
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
@@ -178,17 +178,16 @@ public class T04_Habitacion {
         // Situación de partida:
         // h0 desligada
 
-        nuevoNumero = new int ("Numero nuevo");
+        nuevaplanta = 8;
 
         h1 = habDao.recuperaPorNumero(produtorDatos.h0.getNumero());
-        Assert.assertNotEquals(nuevoNumero, h1.getNumero());
-        r1.setNumero(nuevoNumero);
+        Assert.assertNotEquals(nuevaplanta, h1.getNumero());
+        h1.setPlanta(nuevaplanta);
 
         habDao.modifica(h1);
 
         h2 = habDao.recuperaPorNumero(produtorDatos.h0.getNumero());
-        Assert.assertEquals (nuevoNumero, h2.getNumero());
-
+        Assert.assertEquals (nuevaplanta, h2.getPlanta());
     }
 
     @Test
@@ -227,8 +226,8 @@ public class T04_Habitacion {
         // Numero nulo
         log.info("");
         log.info("Probando gravacion de habitacion con Numero nulo ----------------------------------------------------");
-        produtorDatos.h1.setNumero(null);
         try {
+            produtorDatos.h1.setNumero((Integer) null);
             habDao.almacena(produtorDatos.h1);
             excepcion=false;
         } catch (Exception ex) {
@@ -240,8 +239,8 @@ public class T04_Habitacion {
         // Planta nulo
         log.info("");
         log.info("Probando gravacion de habitacion con planta nulo ----------------------------------------------------");
-        produtorDatos.h1.setPlanta(null);
         try {
+            produtorDatos.h1.setPlanta((Integer) null);
             habDao.almacena(produtorDatos.h1);
             excepcion=false;
         } catch (Exception ex) {
@@ -253,9 +252,9 @@ public class T04_Habitacion {
         // Capacidad nulo
         log.info("");
         log.info("Probando gravacion de habitacion con capacidad nulo ----------------------------------------------------");
-        produtorDatos.h1.setCapacidad(null);
         try {
-            resDao.almacena(produtorDatos.h1);
+            produtorDatos.h1.setCapacidad((Integer) null);
+            habDao.almacena(produtorDatos.h1);
             excepcion=false;
         } catch (Exception ex) {
             excepcion=true;
@@ -303,19 +302,7 @@ public class T04_Habitacion {
             log.info(ex.getClass().getName());
         }
         Assert.assertTrue(excepcion);
-
-
-        // Estado nulo
-        log.info("");
-        log.info("Probando gravacion de usuario con estado nulo ----------------------------------------------------");
-        produtorDatos.r1.setEstado(null);
-        try {
-            habDao.almacena(produtorDatos.h1);
-            excepcion=false;
-        } catch (Exception ex) {
-            excepcion=true;
-            log.info(ex.getClass().getName());
-        }
-        Assert.assertTrue(excepcion);
+    }
+}
 
 
