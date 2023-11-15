@@ -53,6 +53,22 @@ public class Habitacion {
 		residente.setHabitacion(this);
 		this.residentes.add(residente);
 	}
+    
+    public void removeResidente(Residente residente) {
+         if (this.capacidad<this.residentes.size()) throw new RuntimeException ("");
+         residente.setHabitacion(null);
+         this.residentes.remove(residente);
+         this.capacidad ++;
+    }
+
+    
+    public void addEmpleado(Empleado empleado){
+        this.empleados.add(empleado);
+        }
+         
+    public void removeEmpleado(Empleado empleado) {
+        this.empleados.remove(empleado);
+        }
 
     public Long getId() {
         return id;

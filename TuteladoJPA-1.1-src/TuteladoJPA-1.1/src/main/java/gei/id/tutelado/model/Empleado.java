@@ -28,11 +28,10 @@ public class Empleado extends Persona {
     private LocalDate fechaContratacion;
 
     @Column(nullable = true, unique=false)
-    private String horario;
+    private String  horario;
 
     @Column(nullable = true, unique=false)
     private int experiencia;
-     
 
 	public String getNss() {
         return nss;
