@@ -120,6 +120,7 @@ public class ProdutorDatosProba {
 
 		// Crea dos residentes EN MEMORIA: r0, r1
 		creaHabitaciones();
+		gravaHabitaciones();
 		
 		this.r0 = new Residente();
         this.r0.setNif("010V");
@@ -135,7 +136,7 @@ public class ProdutorDatosProba {
 		listaContactos();
 		this.r0.setContactosEmergencia(contactos);
 		//this.r0.setHabitacion(h0);
-		this.r0.setHabitacion(0);
+		this.r0.setHabitacion(h0);
 
 
 		this.r1 = new Residente ();
@@ -150,8 +151,8 @@ public class ProdutorDatosProba {
 		this.r1.setFechaIngreso(LocalDate.of(2008, 02, 10));
 		this.r1.setEstadosalud("excelente");
 		this.r1.setContactosEmergencia(contactos);
-		//this.r1.setHabitacion(h1);
-		this.r1.setHabitacion(1);
+		this.r1.setHabitacion(h1);
+		//this.r1.setHabitacion(1);
 
         this.listaR = new ArrayList<Residente> ();
         this.listaR.add(0,r0);

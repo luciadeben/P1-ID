@@ -28,9 +28,11 @@ public class Residente extends Persona {
     @Column(name = "telefono")
     private List<String> contactosEmergencia;
 
-    @Column(nullable = false, unique=false)
-    //private Habitacion habitacion;
-    private int habitacion;
+
+    @ManyToOne(cascade={})
+    @JoinColumn (nullable=false, unique=false)
+    private Habitacion habitacion;
+    //private int habitacion;
 
 
     public LocalDate getFechaIngreso() {
@@ -63,21 +65,47 @@ public class Residente extends Persona {
     }
 
 
-    /*public Habitacion getHabitacion() {
+    public Habitacion getHabitacion() {
         return habitacion;
     }
 
     public void setHabitacion(Habitacion habitacion) {
         this.habitacion = habitacion;
-    }*/
+    }
 
-    public int getHabitacion() {
+    /*public int getHabitacion() {
         return habitacion;
     }
 
     public void setHabitacion(int habitacion) {
         this.habitacion = habitacion;
-    }
+    }*/
+
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.getNif() == null) ? 0 : this.getNif().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Residente other = (Residente) obj;
+		if (this.getNif() == null) {
+			if (other.getNif() != null)
+				return false;
+		} else if (!this.getNif().equals(other.getNif()))
+			return false;
+		return true;
+	}
+
 
     @Override
     public String toString() {

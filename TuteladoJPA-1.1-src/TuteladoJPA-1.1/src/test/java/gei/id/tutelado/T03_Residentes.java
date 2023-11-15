@@ -284,7 +284,7 @@ public class T03_Residentes {
         log.info("Probando gravacion de usuario con habitacion nulo ----------------------------------------------------");
         //produtorDatos.r1.setHabitacion(null);
         try {
-            produtorDatos.r1.setHabitacion((Integer) null);
+            produtorDatos.r1.setHabitacion(null);
             resDao.almacena(produtorDatos.r1);
             excepcion=false;
         } catch (Exception ex) {
