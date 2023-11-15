@@ -1,7 +1,7 @@
 package gei.id.tutelado.model;
 
 import javax.persistence.*;
-//import java.util.Set;
+import java.util.Set;
 
 @TableGenerator(name="xeradorIdsHabitaciones", table="taboa_ids",
 pkColumnName="nombre_id", pkColumnValue="idHabitacion",
@@ -34,23 +34,24 @@ public class Habitacion {
     @Column(nullable = false, unique=false)
     private String tipo;
 
-    @Column(nullable = false, unique=false)
-    //private Set<Empleado> empleados;
-    private String empleados;
+    @ManyToMany
+    @JoinColumn (nullable=false, unique=false)
+    private Set<Empleado> empleados;
+    //rivate String empleados;
 
-    @Column(nullable = false, unique=true)
-    //private Set<Residente> residentes;
-    private String residentes;
+    @OneToMany(mappedBy = "habitacion")
+    private Set<Residente> residentes;
+    //private String residentes;
 
     @Column(nullable = false, unique=false)
     private String estado;
 
     // Metodo de conveniencia para asegurarnos de que actualizamos los dos extremos de la asociación al mismo tiempo
 	public void addResidente(Residente residente) {
+        if (this.capacidad<this.residentes.size()) throw new RuntimeException ("");
 		if (residente.getHabitacion() != null) throw new RuntimeException ("");
 		residente.setHabitacion(this);
-		// É un sorted set, engadimos sempre por orde de data (ascendente)
-		//this.residentes.add(residente);
+		this.residentes.add(residente);
 	}
 
     public Long getId() {
@@ -87,27 +88,27 @@ public class Habitacion {
         this.tipo = tipo;
     }
 
-    //public Set<Empleado> getEmpleado() {return empleados;}
-    public String getEmpleado() {return empleados;}
+    public Set<Empleado> getEmpleado() {return empleados;}
+    //public String getEmpleado() {return empleados;}
 
-    /*public void setEmpleado(Set<Empleado> empleados) {
-        this.empleados = empleados;
-    }*/
-
-    public void setEmpleado(String empleados) {
+    public void setEmpleado(Set<Empleado> empleados) {
         this.empleados = empleados;
     }
 
-    //public Set<Residente> getResidente() {return residentes;}
-    public String getResidente() {return residentes;}
-
-    /*public void setResidente(Set<Residente> residentes) {
-        this.residentes = residentes;
+    /*public void setEmpleado(String empleados) {
+        this.empleados = empleados;
     }*/
 
-    public void setResidente(String residentes) {
+    public Set<Residente> getResidente() {return residentes;}
+    //public String getResidente() {return residentes;}
+
+    public void setResidente(Set<Residente> residentes) {
         this.residentes = residentes;
     }
+
+    /*public void setResidente(String residentes) {
+        this.residentes = residentes;
+    }*/
 
     public String getEstado() {
         return estado;

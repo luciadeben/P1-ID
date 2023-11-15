@@ -170,12 +170,11 @@ public class ProdutorDatosProba {
 		this.h0.setPlanta(3);
 		this.h0.setCapacidad(3);
 		this.h0.setTipo("compartida");
-		//empleados.add(e1);
+		empleados.add(e1);
 		//this.h0.setEmpleado(empleados);
-		this.h0.setEmpleado("empleado 1, empleado 2");
-		//residentes.add(r1);
-		//this.h0.setResidente(residentes);
-		this.h0.setResidente("residente 1, residente 2");
+		this.h0.setEmpleado(empleados);
+		this.h0.addResidente(r1);
+	//	this.h0.setResidente("residente 1, residente 2");
 		this.h0.setEstado("ocupada");
 
 		this.h1 = new Habitacion();
@@ -183,13 +182,12 @@ public class ProdutorDatosProba {
 		this.h1.setPlanta(2);
 		this.h1.setCapacidad(1);
 		this.h1.setTipo("individual");
-		//empleados.add(e0);
-		//this.h1.setEmpleado(empleados);
-		this.h1.setEmpleado("empleado 1");
-		//residentes.add(r0);
-		//residentes.remove(r1);
+		empleados.add(e0);
+		this.h1.setEmpleado(empleados);
+		//this.h1.setEmpleado("empleado 1");
+		this.h1.addResidente(r0);
 		//this.h1.setResidente(residentes);
-		this.h1.setResidente("residente 3");
+		//this.h1.setResidente("residente 3");
 		this.h1.setEstado("disponible");
 
         this.listaH = new ArrayList<Habitacion> ();

@@ -29,7 +29,7 @@ public class Residente extends Persona {
     private List<String> contactosEmergencia;
 
 
-    @ManyToOne(cascade={})
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn (nullable=false, unique=false)
     private Habitacion habitacion;
     //private int habitacion;
