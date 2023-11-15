@@ -55,12 +55,12 @@ public class Habitacion {
 	}
     
     public void removeResidente(Residente residente) {
-         if (this.capacidad<this.residentes.size()) throw new RuntimeException ("");
-         residente.setHabitacion(null);
-         this.residentes.remove(residente);
-         this.capacidad ++;
+	 if (this.residentes.size() == 0) {
+        throw new RuntimeException("La habitación no tiene residentes para eliminar");
     }
-
+   	 residente.setHabitacion(null);
+    	this.residentes.remove(residente);
+	}
     
     public void addEmpleado(Empleado empleado){
         this.empleados.add(empleado);
