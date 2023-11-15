@@ -113,6 +113,4 @@ public class EntradaLog implements Comparable<EntradaLog> {
 		return (this.dataHora.isBefore(other.getDataHora())? -1:1);
 	}
 
-    
-
 }

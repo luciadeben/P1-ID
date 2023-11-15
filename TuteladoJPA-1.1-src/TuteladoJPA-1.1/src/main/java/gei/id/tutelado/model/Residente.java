@@ -109,7 +109,7 @@ public class Residente extends Persona {
 
     @Override
     public String toString() {
-        return "Residente [fecha_ingreso=" + fecha_ingreso + ", estadoSalud=" + estadoSalud + ", contactosEmergencia=" + contactosEmergencia + ", habitacion=" + habitacion + "]";
+        return "Residente [fecha_ingreso=" + fecha_ingreso + ", estadoSalud=" + estadoSalud + ", contactosEmergencia=" + contactosEmergencia + ", habitacion=" + habitacion.getNumero() + "]";
     }
 
 

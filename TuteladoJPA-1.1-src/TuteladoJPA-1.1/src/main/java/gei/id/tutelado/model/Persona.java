@@ -139,8 +139,7 @@ public abstract class Persona {
 
 	@Override
 	public String toString() {
-		return null;
-		//return "Persona [id=" + id + ", nif=" + nif + ", nombre=" + nombre + ", dataAlta=" + dataAlta + "]";
+		return "Persona [id=" + id + ", nif=" + nif + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", fecha=" + fechaNacimiento + ", genero=" + genero + ", direccion=" + direccion + "]";
 	}
 
     

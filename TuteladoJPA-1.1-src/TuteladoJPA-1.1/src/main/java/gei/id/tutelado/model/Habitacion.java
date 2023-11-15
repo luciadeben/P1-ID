@@ -16,8 +16,7 @@ initialValue=0, allocationSize=1)
 })
 
 @Entity
-@Table(name="Habitacion_tcc")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Table(name="Habitacion")
 public class Habitacion {
     @Id
     @GeneratedValue (generator="xeradorIdsHabitacion")
@@ -144,10 +143,4 @@ public class Habitacion {
     public String toString() {
         return "Habitacion [numero=" + numero + ", planta=" + planta + ", capacidad=" + capacidad + ", tipo=" + tipo + ", empleado=" + empleados + ", residente=" + residentes + ", estado=" + estado + "]";
     }
-
-
-
-
-
-
 }

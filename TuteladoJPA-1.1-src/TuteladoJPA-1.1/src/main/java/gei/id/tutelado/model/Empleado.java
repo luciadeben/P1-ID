@@ -98,10 +98,5 @@ public class Empleado extends Persona {
 	public String toString() {
 		return "Empleado [nss=" + nss + ", salario=" + salario + ", puesto=" + puesto + ", fechaContratacion=" + fechaContratacion + ", experiencia=" + experiencia + "]";
 	}
-
-    
-
-
-
     
 }
