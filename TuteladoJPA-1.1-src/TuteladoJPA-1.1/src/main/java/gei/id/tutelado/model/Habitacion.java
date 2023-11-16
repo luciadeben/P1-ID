@@ -67,6 +67,9 @@ public class Habitacion {
         }
          
     public void removeEmpleado(Empleado empleado) {
+	if (this.residentes.size() == 0) {
+        throw new RuntimeException("La habitación no tiene residentes para eliminar");
+       }
         this.empleados.remove(empleado);
         }
 
