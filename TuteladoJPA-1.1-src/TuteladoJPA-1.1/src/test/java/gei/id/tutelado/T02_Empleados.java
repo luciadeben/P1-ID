@@ -78,7 +78,7 @@ public class T02_Empleados {
 	public void tearDown() throws Exception {
 	}
 	
-	
+	@Test
     public void test01_Recuperacion() {
     	
     	Empleado e;
@@ -115,6 +115,7 @@ public class T02_Empleados {
         Assert.assertEquals(produtorDatos.e0.getFechaContratacion(), e.getFechaContratacion());
         Assert.assertEquals(produtorDatos.e0.getExperiencia(), e.getExperiencia());
         Assert.assertEquals(produtorDatos.e0.getHorario(), e.getHorario());
+		
 
     	log.info("");	
 		log.info("Probando recuperacion por nif INEXISTENTE -----------------------------------------------");

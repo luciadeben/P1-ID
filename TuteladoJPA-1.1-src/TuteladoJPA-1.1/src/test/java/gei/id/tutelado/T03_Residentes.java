@@ -78,6 +78,7 @@ public class T03_Residentes {
     public void tearDown() throws Exception {
     }
 
+    @Test
     public void test01_Recuperacion() {
 
         Residente r;

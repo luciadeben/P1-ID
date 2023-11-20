@@ -4,8 +4,11 @@ import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.dao.HabitacionDao;
 import gei.id.tutelado.dao.HabitacionDaoJPA;
+import gei.id.tutelado.dao.ResidenteDao;
+import gei.id.tutelado.dao.ResidenteDaoJPA;
 import gei.id.tutelado.model.Empleado;
 import gei.id.tutelado.model.Habitacion;
+import gei.id.tutelado.model.Residente;
 
 //import org.apache.log4j.Logger;
 import org.junit.After;
@@ -36,6 +39,7 @@ public class T05_consultas {
 
     private static Configuracion cfg;
     private static HabitacionDao habDao;
+    private static ResidenteDao resDao;
 
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -60,6 +64,8 @@ public class T05_consultas {
 
         habDao = new HabitacionDaoJPA();
         habDao.setup(cfg);
+        resDao = new ResidenteDaoJPA();
+        resDao.setup(cfg);
 
         produtorDatos = new ProdutorDatosProba();
         produtorDatos.Setup(cfg);
@@ -104,12 +110,11 @@ public class T05_consultas {
         }
 
         @Test
-     public void test02_AddRestoHab() {
+        public void test02_AddRestoHab() {
 
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
 
-        produtorDatos.creaHabitaciones();
         produtorDatos.creaResidentes();
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
@@ -118,11 +123,12 @@ public class T05_consultas {
         // Situación de partida:
         // h0 transitorio
 
-        Assert.assertNull(produtorDatos.h0.getEmpleado());
-        produtorDatos.h0.addEmpleado(produtorDatos.e0);
-        habDao.almacena(produtorDatos.h0);
-        Set<Empleado> empleados = produtorDatos.h0.getEmpleado();
-        Assert.assertTrue(empleados.contains (produtorDatos.e0));
+        Habitacion h = produtorDatos.r0.getHabitacion();
+        produtorDatos.r0.setHabitacion(produtorDatos.h1);
+        resDao.almacena(produtorDatos.r0);
+        Assert.assertEquals(produtorDatos.h1, produtorDatos.r0.getHabitacion());
+        Set<Residente> residentes = produtorDatos.h1.getResidente();
+        Assert.assertTrue(residentes.contains(produtorDatos.r0));
         }    
 
     }
