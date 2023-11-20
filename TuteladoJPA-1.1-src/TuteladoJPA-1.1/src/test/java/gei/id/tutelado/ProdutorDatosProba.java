@@ -120,7 +120,6 @@ public class ProdutorDatosProba {
 
 		// Crea dos residentes EN MEMORIA: r0, r1
 		creaHabitaciones();
-		gravaHabitaciones();
 		
 		this.r0 = new Residente();
         this.r0.setNif("010V");
@@ -136,7 +135,6 @@ public class ProdutorDatosProba {
 		listaContactos();
 		this.r0.setContactosEmergencia(contactos);
 		this.r0.setHabitacion(h0);
-
 
 		this.r1 = new Residente ();
         this.r1.setNif("044C");
