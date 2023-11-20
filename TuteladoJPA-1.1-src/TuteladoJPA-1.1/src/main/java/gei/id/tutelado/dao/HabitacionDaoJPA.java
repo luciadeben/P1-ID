@@ -27,7 +27,6 @@ public class HabitacionDaoJPA implements HabitacionDao {
             em.getTransaction().begin();
 
             em.persist(habitacion);
-
             em.getTransaction().commit();
             em.close();
 

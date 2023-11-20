@@ -81,6 +81,10 @@ public class Residente extends Persona {
         this.habitacion = habitacion;
     }*/
 
+    public void addContacto(String contacto){
+        this.contactosEmergencia.add(contacto);
+    }
+
     @Override
 	public int hashCode() {
 		final int prime = 31;

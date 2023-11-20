@@ -1,6 +1,8 @@
 package gei.id.tutelado.model;
 
 import javax.persistence.*;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @TableGenerator(name="xeradorIdsHabitaciones", table="taboa_ids",
@@ -34,8 +36,13 @@ public class Habitacion {
     @Column(nullable = false, unique=false)
     private String tipo;
 
-    @ManyToMany
-    @JoinColumn (nullable=false, unique=false)
+    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE} ) 
+    //@JoinColumn (nullable=false, unique=false)
+    @JoinTable(
+    name = "habitacion_empleado",
+    joinColumns = @JoinColumn(name = "habitacion_id"),
+    inverseJoinColumns = @JoinColumn(name = "empleado_id")
+)
     private Set<Empleado> empleados;
     //rivate String empleados;
 
@@ -48,6 +55,9 @@ public class Habitacion {
 
     // Metodo de conveniencia para asegurarnos de que actualizamos los dos extremos de la asociación al mismo tiempo
 	public void addResidente(Residente residente) {
+         if(residentes == null ){
+            this.residentes = new HashSet<>();
+        }
         if (this.capacidad<this.residentes.size()) throw new RuntimeException ("");
 		if (residente.getHabitacion() != null) throw new RuntimeException ("");
 		residente.setHabitacion(this);
@@ -55,18 +65,24 @@ public class Habitacion {
 	}
     
     public void removeResidente(Residente residente) {
-         if (this.capacidad<this.residentes.size()) throw new RuntimeException ("");
-         residente.setHabitacion(null);
-         this.residentes.remove(residente);
-         this.capacidad ++;
+	 if (this.residentes.size() == 0) {
+        throw new RuntimeException("La habitación no tiene residentes para eliminar");
     }
-
+   	 residente.setHabitacion(null);
+    	this.residentes.remove(residente);
+	}
     
     public void addEmpleado(Empleado empleado){
+        if(empleados == null ){
+            this.empleados = new HashSet<>();
+        }
         this.empleados.add(empleado);
         }
          
     public void removeEmpleado(Empleado empleado) {
+	if (this.residentes.size() == 0) {
+        throw new RuntimeException("La habitación no tiene residentes para eliminar");
+       }
         this.empleados.remove(empleado);
         }
 
