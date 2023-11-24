@@ -4,7 +4,9 @@ import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.dao.EmpleadoDao;
 import gei.id.tutelado.dao.EmpleadoDaoJPA;
+import gei.id.tutelado.dao.PersonaDao;
 import gei.id.tutelado.model.Empleado;
+import gei.id.tutelado.model.Persona;
 
 //import org.apache.log4j.Logger;
 import org.junit.After;
@@ -101,7 +103,7 @@ public class T02_Empleados {
 
     	log.info("Probando recuperacion por nif EXISTENTE --------------------------------------------------");
 
-    	e = empDao.recuperaPorNif(produtorDatos.e0.getNif());
+    	e = (Empleado) empDao.recuperaPorNif(produtorDatos.e0.getNif());
     	Assert.assertEquals(produtorDatos.e0.getNif(),      e.getNif());
     	Assert.assertEquals(produtorDatos.e0.getNombre(),     e.getNombre());
         Assert.assertEquals(produtorDatos.e0.getApellidos(),     e.getApellidos());
@@ -120,7 +122,7 @@ public class T02_Empleados {
     	log.info("");	
 		log.info("Probando recuperacion por nif INEXISTENTE -----------------------------------------------");
     	
-    	e = empDao.recuperaPorNif("iwbvyhuebvuwebvi");
+    	e = (Empleado) empDao.recuperaPorNif("iwbvyhuebvuwebvi");
     	Assert.assertNull (e);
 
     } 	
@@ -188,13 +190,13 @@ public class T02_Empleados {
 
 		nuevoNombre = new String ("Nombre nuevo");
 
-		e1 = empDao.recuperaPorNif(produtorDatos.e0.getNif());
+		e1 = (Empleado) empDao.recuperaPorNif(produtorDatos.e0.getNif());
 		Assert.assertNotEquals(nuevoNombre, e1.getNombre());
     	e1.setNombre(nuevoNombre);
 
     	empDao.modifica(e1);    	
     	
-		e2 = empDao.recuperaPorNif(produtorDatos.e0.getNif());
+		e2 = (Empleado) empDao.recuperaPorNif(produtorDatos.e0.getNif());
 		Assert.assertEquals (nuevoNombre, e2.getNombre());
 
     } 	

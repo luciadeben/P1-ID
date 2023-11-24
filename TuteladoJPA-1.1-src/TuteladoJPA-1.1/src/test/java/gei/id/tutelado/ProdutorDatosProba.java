@@ -33,7 +33,7 @@ public class ProdutorDatosProba {
 	public Residente r0, r1;
 	public List<Residente> listaR;
 
-	public Habitacion h0, h1;
+	public Habitacion h0, h1, h2;
 	public List<Habitacion> listaH;
 
 	public List<String> contactos;
@@ -171,14 +171,31 @@ public class ProdutorDatosProba {
 		this.h1.setPlanta(2);
 		this.h1.setCapacidad(1);
 		this.h1.setTipo("individual");
-		this.h1.setEstado("disponible");
+		this.h1.setEstado("libre");
+
+		this.h2 = new Habitacion();
+		this.h2.setNumero(23);
+		this.h2.setPlanta(2);
+		this.h2.setCapacidad(3);
+		this.h2.setTipo("compartida");
+		this.h2.setEstado("libre");
 
         this.listaH = new ArrayList<Habitacion> ();
         this.listaH.add(0,h0);
-        this.listaH.add(1,h1);        
+        this.listaH.add(1,h1);
+		this.listaH.add(2,h2);        
 
 	}
 
+	/*public void creaHabitacionesconResidentes() {
+
+		this.creaHabitaciones();
+		this.creaResidentes();
+		
+        this.u1.engadirEntradaLog(this.e1A);
+        this.u1.engadirEntradaLog(this.e1B);
+
+	}*/
 
 
 	public void creaEntradasLogSoltas () {

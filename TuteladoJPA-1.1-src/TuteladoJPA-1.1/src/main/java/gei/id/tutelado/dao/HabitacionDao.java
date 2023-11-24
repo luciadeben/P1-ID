@@ -5,7 +5,7 @@ import java.util.List;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.model.Habitacion;
 
-public interface HabitacionDao {
+public interface HabitacionDao{
 
     void setup (Configuracion config);
 
@@ -17,5 +17,6 @@ public interface HabitacionDao {
 
     //QUERIES ADICIONAIS
     List<Habitacion> recuperaTodos();
+    
 }
 

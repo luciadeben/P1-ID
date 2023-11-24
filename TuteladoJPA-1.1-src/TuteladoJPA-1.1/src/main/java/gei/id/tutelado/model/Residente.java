@@ -8,7 +8,9 @@ import java.util.List;
         @NamedQuery (name="Residente.recuperaPorNif",
                 query="SELECT r FROM Residente r where r.nif=:nif"),
         @NamedQuery (name="Residente.recuperaTodos",
-                query="SELECT r FROM Residente r ORDER BY r.nif")
+                query="SELECT r FROM Residente r ORDER BY r.nif"),
+        @NamedQuery(name = "Residente.recuperaHabitacion",
+                query = "SELECT r FROM Residente r INNER JOIN r.habitacion h WHERE h.id = :habitacionId")
 })
 
 @Entity
@@ -23,13 +25,13 @@ public class Residente extends Persona {
     private String estadoSalud;
 
 
-    @ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
     @CollectionTable(name = "TelefonosContacto", joinColumns = @JoinColumn(name = "residente_id"))
     @Column(name = "telefono")
     private List<String> contactosEmergencia;
 
 
-    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn (nullable=false, unique=false)
     private Habitacion habitacion;
     //private int habitacion;
@@ -70,7 +72,16 @@ public class Residente extends Persona {
     }
 
     public void setHabitacion(Habitacion habitacion) {
-        this.habitacion = habitacion;
+        if(habitacion!=null){
+            if(this.habitacion!=null){
+                this.habitacion.removeResidente(this);
+            }
+            this.habitacion = habitacion;
+            habitacion.addResidente(this);
+        }
+        else{
+            this.habitacion = habitacion;
+        }
     }
 
     /*public int getHabitacion() {
@@ -84,32 +95,6 @@ public class Residente extends Persona {
     public void addContacto(String contacto){
         this.contactosEmergencia.add(contacto);
     }
-
-    @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.getNif() == null) ? 0 : this.getNif().hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Residente other = (Residente) obj;
-		if (this.getNif() == null) {
-			if (other.getNif() != null)
-				return false;
-		} else if (!this.getNif().equals(other.getNif()))
-			return false;
-		return true;
-	}
-
 
     @Override
     public String toString() {

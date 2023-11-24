@@ -10,6 +10,9 @@ public interface PersonaDao {
 	void setup (Configuracion config);
 	
 	// OPERACIONS CRUD BASICAS
+	Persona almacena (Persona persona);
+	Persona modifica (Persona persona);
+	void elimina (Persona persona);	
 	Persona recuperaPorNif (String nif);
 
 	//QUERIES ADICIONAIS

@@ -7,6 +7,7 @@ import gei.id.tutelado.dao.HabitacionDaoJPA;
 import gei.id.tutelado.dao.ResidenteDao;
 import gei.id.tutelado.dao.ResidenteDaoJPA;
 import gei.id.tutelado.model.Empleado;
+import gei.id.tutelado.model.EntradaLog;
 import gei.id.tutelado.model.Habitacion;
 import gei.id.tutelado.model.Residente;
 
@@ -24,6 +25,7 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -109,8 +111,8 @@ public class T05_consultas {
         Assert.assertTrue(empleados.contains (produtorDatos.e0));
         }
 
-        @Test
-        public void test02_AddRestoHab() {
+    @Test
+    public void test02_AddRestoHab() {
 
         log.info("");
         log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
@@ -130,6 +132,33 @@ public class T05_consultas {
         Set<Residente> residentes = produtorDatos.h1.getResidente();
         Assert.assertTrue(residentes.contains(produtorDatos.r0));
         }    
+    
+    @Test 
+    public void test03_ResidentesH() {
 
+    	List<Residente> listaR;
+    	
+    	log.info("");	
+		log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+		produtorDatos.creaHabitaciones();
+    	produtorDatos.creaResidentes();
+        produtorDatos.gravaResidentes();
+
+    	log.info("");	
+		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+    	log.info("Obxectivo: Proba da consulta Residente.recuperaHabitacion\n");   
+
+    	// Situación de partida:
+    	// u1, e1A, e1B desligados
+
+		listaR = resDao.recuperaPorHabitacion(produtorDatos.h2);
+		Assert.assertEquals(0, listaR.size());;
+		
+		listaR = resDao.recuperaPorHabitacion(produtorDatos.h0);
+		Assert.assertEquals(1, listaR.size());
+		Assert.assertEquals(produtorDatos.r1, listaR.get(0));
+
+    }
     }
 

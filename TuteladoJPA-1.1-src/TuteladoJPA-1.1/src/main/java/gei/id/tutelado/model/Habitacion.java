@@ -36,52 +36,48 @@ public class Habitacion {
     @Column(nullable = false, unique=false)
     private String tipo;
 
-    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE} ) 
-    //@JoinColumn (nullable=false, unique=false)
-    @JoinTable(
-    name = "habitacion_empleado",
-    joinColumns = @JoinColumn(name = "habitacion_id"),
-    inverseJoinColumns = @JoinColumn(name = "empleado_id")
-)
+    @ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn (nullable=false, unique=false)
     private Set<Empleado> empleados;
     //rivate String empleados;
 
-    @OneToMany(mappedBy = "habitacion")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "habitacion", cascade={CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Residente> residentes;
-    //private String residentes;
+    //private String residentes
 
     @Column(nullable = false, unique=false)
     private String estado;
 
     // Metodo de conveniencia para asegurarnos de que actualizamos los dos extremos de la asociación al mismo tiempo
 	public void addResidente(Residente residente) {
-         if(residentes == null ){
+        if(residentes==null){
             this.residentes = new HashSet<>();
         }
         if (this.capacidad<this.residentes.size()) throw new RuntimeException ("");
-		if (residente.getHabitacion() != null) throw new RuntimeException ("");
-		residente.setHabitacion(this);
 		this.residentes.add(residente);
+        if(residente.getHabitacion() != this){
+          residente.setHabitacion(this);
+        }
 	}
     
     public void removeResidente(Residente residente) {
-	 if (this.residentes.size() == 0) {
-        throw new RuntimeException("La habitación no tiene residentes para eliminar");
+        if (this.residentes.size() == 0) {
+            throw new RuntimeException("La habitación no tiene residentes para eliminar");
+        }
+        residente.setHabitacion(null);
+        this.residentes.remove(residente);
     }
-   	 residente.setHabitacion(null);
-    	this.residentes.remove(residente);
-	}
     
     public void addEmpleado(Empleado empleado){
-        if(empleados == null ){
+        if(empleados==null){
             this.empleados = new HashSet<>();
         }
         this.empleados.add(empleado);
-        }
+    }
          
     public void removeEmpleado(Empleado empleado) {
 	if (this.residentes.size() == 0) {
-        throw new RuntimeException("La habitación no tiene residentes para eliminar");
+        throw new RuntimeException("La habitación no tiene empleados para eliminar");
        }
         this.empleados.remove(empleado);
         }
