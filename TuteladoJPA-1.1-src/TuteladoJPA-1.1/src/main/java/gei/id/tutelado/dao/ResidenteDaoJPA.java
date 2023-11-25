@@ -53,8 +53,8 @@ public class ResidenteDaoJPA extends PersonaDaoJPA implements ResidenteDao {
             em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            residentes = em.createNamedQuery("Residente.recuperaHabitacion", Residente.class)
-                .setParameter("habitacionId", habitacion.getId())
+            residentes = em.createNamedQuery("Residente.recuperaPorHabitacion", Residente.class)
+                .setParameter("habitacion", habitacion)
                 .getResultList();
 
             em.getTransaction().commit();

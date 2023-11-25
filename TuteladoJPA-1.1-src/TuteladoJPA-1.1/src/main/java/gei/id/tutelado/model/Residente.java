@@ -10,7 +10,9 @@ import java.util.List;
         @NamedQuery (name="Residente.recuperaTodos",
                 query="SELECT r FROM Residente r ORDER BY r.nif"),
         @NamedQuery(name = "Residente.recuperaConHabitacion",
-                query="SELECT r FROM Residente r LEFT JOIN FETCH r.habitacion WHERE r.nif = :nif"),        
+                query="SELECT r FROM Residente r INNER JOIN FETCH r.habitacion WHERE r.nif = :nif"),
+        @NamedQuery(name = "Residente.recuperaPorHabitacion",
+                query="SELECT r FROM Residente r INNER JOIN FETCH r.habitacion WHERE r.habitacion = :habitacion"),        
 })
 
 @Entity

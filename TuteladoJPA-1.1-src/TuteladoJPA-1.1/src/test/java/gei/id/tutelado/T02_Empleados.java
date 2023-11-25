@@ -4,9 +4,7 @@ import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.configuracion.Configuracion;
 import gei.id.tutelado.dao.EmpleadoDao;
 import gei.id.tutelado.dao.EmpleadoDaoJPA;
-import gei.id.tutelado.dao.PersonaDao;
 import gei.id.tutelado.model.Empleado;
-import gei.id.tutelado.model.Persona;
 
 //import org.apache.log4j.Logger;
 import org.junit.After;

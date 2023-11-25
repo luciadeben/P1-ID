@@ -35,6 +35,7 @@ public class ProdutorDatosProba {
 
 	public Habitacion h0, h1, h2;
 	public List<Habitacion> listaH;
+	public List<Habitacion> listaHsR;
 
 	public List<String> contactos;
 	
@@ -173,6 +174,14 @@ public class ProdutorDatosProba {
 		this.h1.setTipo("individual");
 		this.h1.setEstado("libre");
 
+        this.listaH = new ArrayList<Habitacion> ();
+        this.listaH.add(0,h0);
+        this.listaH.add(1,h1);      
+
+	}
+
+	public void creaHabitacionessinResidentes() {
+
 		this.h2 = new Habitacion();
 		this.h2.setNumero(23);
 		this.h2.setPlanta(2);
@@ -180,22 +189,9 @@ public class ProdutorDatosProba {
 		this.h2.setTipo("compartida");
 		this.h2.setEstado("libre");
 
-        this.listaH = new ArrayList<Habitacion> ();
-        this.listaH.add(0,h0);
-        this.listaH.add(1,h1);
-		this.listaH.add(2,h2);        
-
+		this.listaHsR = new ArrayList<Habitacion> ();
+		this.listaHsR.add(0,h2);  
 	}
-
-	/*public void creaHabitacionesconResidentes() {
-
-		this.creaHabitaciones();
-		this.creaResidentes();
-		
-        this.u1.engadirEntradaLog(this.e1A);
-        this.u1.engadirEntradaLog(this.e1B);
-
-	}*/
 
 
 	public void creaEntradasLogSoltas () {
@@ -323,6 +319,35 @@ public class ProdutorDatosProba {
 			em.getTransaction().begin();
 
 			Iterator<Habitacion> itH = this.listaH.iterator();
+			while (itH.hasNext()) {
+				Habitacion h = itH.next();
+				em.persist(h);
+				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
+				/*
+				Iterator<EntradaLog> itEL = u.getEntradasLog().iterator();
+				while (itRL.hasNext()) {
+					em.persist(itRL.next());
+				}
+				*/
+			}
+			em.getTransaction().commit();
+			em.close();
+		} catch (Exception e) {
+			if (em!=null && em.isOpen()) {
+				if (em.getTransaction().isActive()) em.getTransaction().rollback();
+				em.close();
+				throw (e);
+			}
+		}	
+	}
+
+	public void gravaHabitacionessinR() {
+		EntityManager em=null;
+		try {
+			em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			Iterator<Habitacion> itH = this.listaHsR.iterator();
 			while (itH.hasNext()) {
 				Habitacion h = itH.next();
 				em.persist(h);
