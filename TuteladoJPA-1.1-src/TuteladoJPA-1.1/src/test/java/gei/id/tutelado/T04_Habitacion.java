@@ -6,7 +6,6 @@ import gei.id.tutelado.dao.HabitacionDao;
 import gei.id.tutelado.dao.HabitacionDaoJPA;
 import gei.id.tutelado.model.Habitacion;
 
-//import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -91,7 +90,7 @@ public class T04_Habitacion {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de recuperación desde a BD de habitacion (sen entradas asociadas) por numero\n"
+        log.info("Obxectivo: Proba de recuperación desde a BD de habitacion (sin residentes ni empleados asociados) por numero\n"
                 + "\t\t\t\t Casos contemplados:\n"
                 + "\t\t\t\t a) Recuperación por numero existente\n"
                 + "\t\t\t\t b) Recuperacion por numero inexistente\n");
@@ -106,8 +105,16 @@ public class T04_Habitacion {
         Assert.assertEquals(produtorDatos.h0.getPlanta(),     h.getPlanta());
         Assert.assertEquals(produtorDatos.h0.getCapacidad(),     h.getCapacidad());
         Assert.assertEquals(produtorDatos.h0.getTipo(), h.getTipo());
-        //Assert.assertEquals(produtorDatos.h0.getEmpleado(), h.getEmpleado());
-        //Assert.assertEquals(produtorDatos.h0.getResidente(), h.getResidente());
+        if (produtorDatos.h0.getEmpleado() == null) {
+            Assert.assertTrue(h.getEmpleado().isEmpty());
+        } else {
+            Assert.assertEquals(produtorDatos.h0.getEmpleado(), h.getEmpleado());
+        }
+        if (produtorDatos.h0.getResidente() == null) {
+            Assert.assertTrue(h.getResidente().isEmpty());
+        } else {
+            Assert.assertEquals(produtorDatos.h0.getResidente(), h.getResidente());
+        }
         Assert.assertEquals(produtorDatos.h0.getEstado(), h.getEstado());
 
         log.info("");
@@ -128,7 +135,7 @@ public class T04_Habitacion {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de gravación na BD de nova habitacion (sen entradas de log asociadas)\n");
+        log.info("Obxectivo: Proba de gravación na BD de nova habitacion (sin residentes ni empleados asociados)\n");
 
         // Situación de partida:
         // h0 transitorio
@@ -150,7 +157,7 @@ public class T04_Habitacion {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de eliminación da BD de habitacion sen entradas asociadas\n");
+        log.info("Obxectivo: Proba de eliminación da BD de habitacion sin residentes ni empleados asociados\n");
 
         // Situación de partida:
         // h0 desligado
@@ -174,7 +181,7 @@ public class T04_Habitacion {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de modificación da información básica dunha habitacion sen entradas de log\n");
+        log.info("Obxectivo: Proba de modificación da información básica dunha habitacion sin residentes ni empleados asociados\n");
 
         // Situación de partida:
         // h0 desligada

@@ -58,6 +58,7 @@ public class T03_Residentes {
 
         resDao = new ResidenteDaoJPA();
         resDao.setup(cfg);
+        resDao.setupRes(cfg);
 
         produtorDatos = new ProdutorDatosProba();
         produtorDatos.Setup(cfg);
@@ -92,7 +93,7 @@ public class T03_Residentes {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de recuperación desde a BD de usuario (sen entradas asociadas) por nif\n"
+        log.info("Obxectivo: Proba de recuperación desde a BD de residente (con habitacion asociada) por nif\n"
                 + "\t\t\t\t Casos contemplados:\n"
                 + "\t\t\t\t a) Recuperación por nif existente\n"
                 + "\t\t\t\t b) Recuperacion por nif inexistente\n");
@@ -102,7 +103,7 @@ public class T03_Residentes {
 
         log.info("Probando recuperacion por nif EXISTENTE --------------------------------------------------");
 
-        r = (Residente) resDao.recuperaPorNif(produtorDatos.r0.getNif());
+        r = (Residente) resDao.recuperaConHabitacion(produtorDatos.r0);
         Assert.assertEquals(produtorDatos.r0.getNif(),      r.getNif());
         Assert.assertEquals(produtorDatos.r0.getNombre(),     r.getNombre());
         Assert.assertEquals(produtorDatos.r0.getApellidos(),     r.getApellidos());
@@ -112,8 +113,10 @@ public class T03_Residentes {
         Assert.assertEquals(produtorDatos.r0.getDireccion(), r.getDireccion());
         Assert.assertEquals(produtorDatos.r0.getFechaIngreso(), r.getFechaIngreso());
         Assert.assertEquals(produtorDatos.r0.getEstadosalud(), r.getEstadosalud());
-        Assert.assertEquals(produtorDatos.r0.getContactosEmergencia(), r.getContactosEmergencia());
-        //Assert.assertEquals(produtorDatos.r0.getHabitacion(), r.getHabitacion());
+        for(int i=0; i<produtorDatos.r0.getContactosEmergencia().size(); i++){
+            Assert.assertEquals(produtorDatos.r0.getContactosEmergencia().get(i), r.getContactosEmergencia().get(i));
+        }
+        Assert.assertEquals(produtorDatos.r0.getHabitacion(), r.getHabitacion());
 
         log.info("");
         log.info("Probando recuperacion por nif INEXISTENTE -----------------------------------------------");
@@ -133,7 +136,7 @@ public class T03_Residentes {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de gravación na BD de novo usuario (sen entradas de log asociadas)\n");
+        log.info("Obxectivo: Proba de gravación na BD de novo residente \n");
 
         // Situación de partida:
         // u0 transitorio
@@ -155,7 +158,7 @@ public class T03_Residentes {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de eliminación da BD de usuario sen entradas asociadas\n");
+        log.info("Obxectivo: Proba de eliminación da BD de residente\n");
 
         // Situación de partida:
         // r0 desligado
@@ -179,7 +182,7 @@ public class T03_Residentes {
 
         log.info("");
         log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-        log.info("Obxectivo: Proba de modificación da información básica dun usuario sen entradas de log\n");
+        log.info("Obxectivo: Proba de modificación da información básica dun residente\n");
 
         // Situación de partida:
         // r0 desligado
@@ -218,7 +221,7 @@ public class T03_Residentes {
         // Situación de partida:
         // r0 desligado, r1 transitorio
 
-        log.info("Probando gravacion de usuario con Nif duplicado -----------------------------------------------");
+        log.info("Probando gravacion de residente con Nif duplicado -----------------------------------------------");
         produtorDatos.r1.setNif(produtorDatos.r0.getNif());
         try {
             resDao.almacena(produtorDatos.r1);
@@ -231,7 +234,7 @@ public class T03_Residentes {
 
         // Nif nulo
         log.info("");
-        log.info("Probando gravacion de usuario con Nif nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Nif nulo ----------------------------------------------------");
         produtorDatos.r1.setNif(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -244,7 +247,7 @@ public class T03_Residentes {
 
         // Fecha de ingreso nulo
         log.info("");
-        log.info("Probando gravacion de usuario con fecha ingreso nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con fecha ingreso nulo ----------------------------------------------------");
         produtorDatos.r1.setFechaIngreso(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -257,7 +260,7 @@ public class T03_Residentes {
 
         // Estado salud nulo
         log.info("");
-        log.info("Probando gravacion de usuario con Estado salud nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Estado salud nulo ----------------------------------------------------");
         produtorDatos.r1.setEstadosalud(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -270,7 +273,7 @@ public class T03_Residentes {
 
         // Contactos Emergencia nulo
         log.info("");
-        log.info("Probando gravacion de usuario con contactos emergencia nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con contactos emergencia nulo ----------------------------------------------------");
         produtorDatos.r1.setContactosEmergencia(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -283,8 +286,7 @@ public class T03_Residentes {
 
         // Habitacion nulo
         log.info("");
-        log.info("Probando gravacion de usuario con habitacion nulo ----------------------------------------------------");
-        //produtorDatos.r1.setHabitacion(null);
+        log.info("Probando gravacion de residente con habitacion nulo ----------------------------------------------------");
         try {
             produtorDatos.r1.setHabitacion(null);
             resDao.almacena(produtorDatos.r1);
@@ -298,7 +300,7 @@ public class T03_Residentes {
 
         // Nombre nulo
         log.info("");
-        log.info("Probando gravacion de usuario con Nombre nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Nombre nulo ----------------------------------------------------");
         produtorDatos.r1.setNombre(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -311,7 +313,7 @@ public class T03_Residentes {
 
         // Apellidos nulo
         log.info("");
-        log.info("Probando gravacion de usuario con Apellidos nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Apellidos nulo ----------------------------------------------------");
         produtorDatos.r1.setApellidos(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -324,7 +326,7 @@ public class T03_Residentes {
 
         // Fecha de Nacimiento nula
         log.info("");
-        log.info("Probando gravacion de usuario con Fecha de nacimiento nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Fecha de nacimiento nulo ----------------------------------------------------");
         produtorDatos.r1.setFechaNacimiento(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -337,7 +339,7 @@ public class T03_Residentes {
 
         // Genero nulo
         log.info("");
-        log.info("Probando gravacion de usuario con Genero nulo ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Genero nulo ----------------------------------------------------");
         produtorDatos.r1.setGenero(null);
         try {
             resDao.almacena(produtorDatos.r1);
@@ -350,7 +352,7 @@ public class T03_Residentes {
 
         // Direccion nula
         log.info("");
-        log.info("Probando gravacion de usuario con Direccion nula ----------------------------------------------------");
+        log.info("Probando gravacion de residente con Direccion nula ----------------------------------------------------");
         produtorDatos.r1.setDireccion(null);
         try {
             resDao.almacena(produtorDatos.r1);

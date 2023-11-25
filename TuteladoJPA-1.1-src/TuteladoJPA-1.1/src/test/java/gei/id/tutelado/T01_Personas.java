@@ -6,7 +6,6 @@ import gei.id.tutelado.dao.PersonaDao;
 import gei.id.tutelado.dao.PersonaDaoJPA;
 import gei.id.tutelado.model.Persona;
 
-//import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -91,7 +90,7 @@ public class T01_Personas {
     	
     	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-    	log.info("Obxectivo: Proba de recuperación desde a BD de personas (sen entradas asociadas) por nif\n"   
+    	log.info("Obxectivo: Proba de recuperación desde a BD de personas por nif\n"   
     			+ "\t\t\t\t Casos contemplados:\n"
     			+ "\t\t\t\t a) Recuperación por nif existente\n"
     			+ "\t\t\t\t b) Recuperacion por nif inexistente\n");

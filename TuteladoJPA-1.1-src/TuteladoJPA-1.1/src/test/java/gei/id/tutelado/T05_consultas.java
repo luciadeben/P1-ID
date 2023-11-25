@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class T05_consultas {
+public class T05_Consultas {
 
     private Logger log = LogManager.getLogger("gei.id.tutelado");
 
@@ -125,7 +125,6 @@ public class T05_consultas {
         // Situación de partida:
         // h0 transitorio
 
-        Habitacion h = produtorDatos.r0.getHabitacion();
         produtorDatos.r0.setHabitacion(produtorDatos.h1);
         resDao.almacena(produtorDatos.r0);
         Assert.assertEquals(produtorDatos.h1, produtorDatos.r0.getHabitacion());

@@ -17,6 +17,6 @@ public interface HabitacionDao{
 
     //QUERIES ADICIONAIS
     List<Habitacion> recuperaTodos();
-    
+    Habitacion recuperaConEmpleados(Habitacion habitacion);
 }
 

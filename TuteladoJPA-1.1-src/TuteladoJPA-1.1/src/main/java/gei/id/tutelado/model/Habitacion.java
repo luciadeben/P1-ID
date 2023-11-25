@@ -13,6 +13,8 @@ initialValue=0, allocationSize=1)
 @NamedQueries ({
         @NamedQuery (name="Habitacion.recuperaPorNumero",
                 query="SELECT h FROM Habitacion h where h.numero=:numero"),
+        @NamedQuery (name="Habitacion.recuperaConEmpleados",
+                query="SELECT h FROM Habitacion h LEFT JOIN FETCH h.empleados WHERE h.numero = :numero"),        
         @NamedQuery (name="Habitacion.recuperaTodos",
                 query="SELECT h FROM Habitacion h ORDER BY h.numero")
 })

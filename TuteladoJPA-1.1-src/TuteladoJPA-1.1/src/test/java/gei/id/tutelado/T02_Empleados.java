@@ -93,7 +93,7 @@ public class T02_Empleados {
     	
     	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-    	log.info("Obxectivo: Proba de recuperación desde a BD de usuario (sen entradas asociadas) por nif\n"   
+    	log.info("Obxectivo: Proba de recuperación desde a BD de empleados por nif\n"   
     			+ "\t\t\t\t Casos contemplados:\n"
     			+ "\t\t\t\t a) Recuperación por nif existente\n"
     			+ "\t\t\t\t b) Recuperacion por nif inexistente\n");
@@ -137,7 +137,7 @@ public class T02_Empleados {
     	
     	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-    	log.info("Obxectivo: Proba de gravación na BD de novo usuario (sen entradas de log asociadas)\n");
+    	log.info("Obxectivo: Proba de gravación na BD de novo empleado \n");
     	
     	// Situación de partida:
     	// u0 transitorio    	
@@ -159,7 +159,7 @@ public class T02_Empleados {
     	
     	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-    	log.info("Obxectivo: Proba de eliminación da BD de usuario sen entradas asociadas\n");   
+    	log.info("Obxectivo: Proba de eliminación da BD de empleado sen habitaciones asociadas\n");   
  
     	// Situación de partida:
     	// u0 desligado  
@@ -183,7 +183,7 @@ public class T02_Empleados {
 
     	log.info("");	
 		log.info("Inicio do test --------------------------------------------------------------------------------------------------");
-    	log.info("Obxectivo: Proba de modificación da información básica dun usuario sen entradas de log\n");
+    	log.info("Obxectivo: Proba de modificación da información básica dun empleado\n");
 
     	// Situación de partida:
     	// u0 desligado  
