@@ -36,7 +36,6 @@ public class Residente extends Persona {
     @ManyToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn (nullable=false, unique=false)
     private Habitacion habitacion;
-    //private int habitacion;
 
 
     public LocalDate getFechaIngreso() {
@@ -86,14 +85,6 @@ public class Residente extends Persona {
         }
     }
 
-    /*public int getHabitacion() {
-        return habitacion;
-    }
-
-    public void setHabitacion(int habitacion) {
-        this.habitacion = habitacion;
-    }*/
-
     public void addContacto(String contacto){
         this.contactosEmergencia.add(contacto);
     }
@@ -102,10 +93,5 @@ public class Residente extends Persona {
     public String toString() {
         return "Residente [fecha_ingreso=" + fecha_ingreso + ", estadoSalud=" + estadoSalud + ", contactosEmergencia=" + contactosEmergencia + ", habitacion=" + habitacion.getNumero() + "]";
     }
-
-
-
-
-
 
 }

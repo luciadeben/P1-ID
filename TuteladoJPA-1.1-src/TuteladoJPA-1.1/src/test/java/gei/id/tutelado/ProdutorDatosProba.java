@@ -22,8 +22,9 @@ public class ProdutorDatosProba {
 	public Empleado e0, e1;
 	public List<Empleado> listaE;
 
-	public Residente r0, r1;
+	public Residente r0, r1, r2;
 	public List<Residente> listaR;
+	public List<Residente> listaREx;
 
 	public Habitacion h0, h1, h2, h999;
 	public List<Habitacion> listaH;
@@ -126,6 +127,29 @@ public class ProdutorDatosProba {
         this.listaR = new ArrayList<Residente> ();
         this.listaR.add(0,r0);
         this.listaR.add(1,r1);        
+
+	}
+	
+	public void creaResidenteExtra() {
+
+		// Crea dos residentes EN MEMORIA: r0, r1
+		
+		this.r2 = new Residente();
+        this.r2.setNif("11010V");
+        this.r2.setNombre("Residente dos");
+		this.r2.setApellidos("Santos Domingo");
+		this.r2.setTelefono("6234231112");
+		this.r2.setFechaNacimiento(LocalDate.of(1800, 03, 10));
+		this.r2.setGenero("Mujer");
+		this.r2.setDireccion("Rua de las Cuevas, 6");
+
+		this.r2.setFechaIngreso(LocalDate.of(2008, 02, 10));
+		this.r2.setEstadosalud("delicado");
+		listaContactos();
+		this.r2.setContactosEmergencia(contactos);
+		this.r2.setHabitacion(this.h0);
+
+        this.listaR.add(2,r2);
 
 	}
 

@@ -18,8 +18,10 @@ initialValue=0, allocationSize=1)
         @NamedQuery(name = "Habitacion.getEmpleadosPorHabitacion",
                 query = "SELECT habitacion, COUNT(empleado) FROM Habitacion habitacion LEFT JOIN habitacion.empleados empleado GROUP BY habitacion.id"),
         @NamedQuery(name = "Habitacion.recuperaConResidentes",
-                query = "SELECT h FROM Habitacion h LEFT JOIN FETCH h.residentes")    
-
+                query = "SELECT h FROM Habitacion h LEFT JOIN FETCH h.residentes"),
+        @NamedQuery(name = "Habitacion.recuperaSiConResidentes",
+                query = "SELECT h FROM Habitacion h LEFT JOIN FETCH h.residentes " +
+                "WHERE (SELECT count(r) FROM Residente r WHERE r.habitacion = h) > 1")
 })
 
 @Entity
@@ -48,11 +50,10 @@ public class Habitacion {
         inverseJoinColumns = @JoinColumn(name = "empleado_id")  // Columna que hace referencia a Empleado
     )
     private Set<Empleado> empleados;
-    //rivate String empleados;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "habitacion", cascade={CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Residente> residentes;
-    //private String residentes
+
 
     @Column(nullable = false, unique=false)
     private String estado;
@@ -118,26 +119,16 @@ public class Habitacion {
     }
 
     public Set<Empleado> getEmpleado() {return empleados;}
-    //public String getEmpleado() {return empleados;}
 
     public void setEmpleado(Set<Empleado> empleados) {
         this.empleados = empleados;
     }
 
-    /*public void setEmpleado(String empleados) {
-        this.empleados = empleados;
-    }*/
-
     public Set<Residente> getResidente() {return residentes;}
-    //public String getResidente() {return residentes;}
 
     public void setResidente(Set<Residente> residentes) {
         this.residentes = residentes;
     }
-
-    /*public void setResidente(String residentes) {
-        this.residentes = residentes;
-    }*/
 
     public String getEstado() {
         return estado;

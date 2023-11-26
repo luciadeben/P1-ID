@@ -300,8 +300,95 @@ public class T05_Consultas_Comprobaciones {
         }    
         empDao.elimina(produtorDatos.e0);
         Assert.assertNull(empDao.recuperaPorNif(produtorDatos.e0.getNif()));
-    }    
+    }
+    
+    @Test
+    public void test08_RecuperaSiResyEmp() {
 
+        List<Habitacion> habitaciones;
+
+        log.info("");
+        log.info(
+                "Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaHabitaciones();
+        produtorDatos.creaHabitacionessinResidentes();
+        produtorDatos.creaResidentes();
+        produtorDatos.creaResidenteExtra();
+        produtorDatos.gravaHabitacionessinR();
+        produtorDatos.gravaResidentes();
+
+        log.info("");
+        log.info(
+                "Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da consulta Residente.recuperaHabitacion\n");
+
+        // Situación de partida:
+        // u1, e1A, e1B desligados
+
+        habitaciones = habDao.recuperaSiResidente();
+        Assert.assertFalse(habitaciones.isEmpty());
+        for(int i=0;i<habitaciones.size();i++){
+            Assert.assertTrue(habitaciones.get(i).getResidente().size()>1);
+        }
+    }
+
+    @Test
+    public void test09_CargaEager() {
+        Habitacion h;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaHabitaciones();
+        produtorDatos.gravaHabitaciones();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba carga Eager\n");
+
+        h = habDao.recuperaPorNumero(produtorDatos.h0.getNumero());
+
+        Assert.assertTrue(h.getEmpleado().isEmpty());
+
+    }
+
+    @Test
+    public void test10_CargaLazy() {
+        Residente r;
+        Boolean excepcion;
+
+        log.info("");
+        log.info("Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaResidentes();
+        produtorDatos.gravaResidentes();
+
+        log.info("");
+        log.info("Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba carga Lazy\n");
+
+        r = (Residente) resDao.recuperaPorNif(produtorDatos.r0.getNif());
+        try {
+        	Assert.assertNull(r.getHabitacion());
+        	excepcion=false;
+    	} catch (Exception ex) {
+    		excepcion=true;
+    		log.info(ex.getClass().getName());
+    	}
+    	Assert.assertTrue(excepcion);
+
+        r = (Residente) resDao.recuperaConHabitacion(produtorDatos.r0);
+        try {
+        	Assert.assertNotNull(r.getHabitacion());
+        	excepcion=false;
+    	} catch (Exception ex) {
+    		excepcion=true;
+    		log.info(ex.getClass().getName());
+    	}
+    	Assert.assertFalse(excepcion);
+
+    }
 
     
 }

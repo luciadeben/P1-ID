@@ -103,14 +103,6 @@ public abstract class Persona {
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
-	
-	// Metodo de conveniencia para asegurarnos de que actualizamos os dous extremos da asociación ao mesmo tempo
-/* 	public void engadirEntradaLog(EntradaLog entrada) {
-		if (entrada.getUsuario() != null) throw new RuntimeException ("");
-		entrada.setUsuario(this);
-		// É un sorted set, engadimos sempre por orde de data (ascendente)
-		this.entradasLog.add(entrada);
-	}*/
 
 	@Override
 	public int hashCode() {

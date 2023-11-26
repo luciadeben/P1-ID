@@ -135,35 +135,7 @@ public class HabitacionDaoJPA implements HabitacionDao {
 
         return habitaciones;
     }
-
-    @Override
-    public Habitacion recuperaConEmpleados(Habitacion habitacion){
-        Habitacion habitacionaux = null;
-
-        try {
-            em = emf.createEntityManager();
-            em.getTransaction().begin();
-
-            habitacionaux = em.createNamedQuery("Habitacion.recuperaConEmpleados", Habitacion.class)
-            .setParameter("numero", habitacion.getNumero())
-            .getSingleResult();
-
-            em.getTransaction().commit();
-            em.close();
-
-        }
-        catch (Exception ex ) {
-            if (em!=null && em.isOpen()) {
-                if (em.getTransaction().isActive()) em.getTransaction().rollback();
-                em.close();
-                throw(ex);
-            }
-        }
-
-        return habitacionaux;
-
-    }
-
+    
     @Override
     public List<Object[]> recuperaconTotalEmpleados() {
         List<Object[]> habitaciones = null;
@@ -199,6 +171,32 @@ public class HabitacionDaoJPA implements HabitacionDao {
             em.getTransaction().begin();
 
             habitaciones = em.createNamedQuery("Habitacion.recuperaConResidentes", Habitacion.class)
+            .getResultList();
+
+            em.getTransaction().commit();
+            em.close();
+
+        }
+        catch (Exception ex ) {
+            if (em!=null && em.isOpen()) {
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+
+        return habitaciones;
+    }
+
+    @Override
+    public List<Habitacion> recuperaSiResidente() {
+        List<Habitacion> habitaciones = null;
+
+        try {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            habitaciones = em.createNamedQuery("Habitacion.recuperaSiConResidentes", Habitacion.class)
             .getResultList();
 
             em.getTransaction().commit();
