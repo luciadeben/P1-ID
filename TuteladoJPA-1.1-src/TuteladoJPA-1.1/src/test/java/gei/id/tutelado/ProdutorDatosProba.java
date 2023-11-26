@@ -1,8 +1,6 @@
 package gei.id.tutelado;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,12 +18,6 @@ public class ProdutorDatosProba {
 	// Crea un conxunto de obxectos para utilizar nos casos de proba
 	
 	private EntityManagerFactory emf=null;
-	
-	public Usuario u0, u1;
-	public List<Usuario> listaxeU;
-	
-	public EntradaLog e1A, e1B;
-	public List<EntradaLog> listaxeE;
 
 	public Empleado e0, e1;
 	public List<Empleado> listaE;
@@ -33,7 +25,7 @@ public class ProdutorDatosProba {
 	public Residente r0, r1;
 	public List<Residente> listaR;
 
-	public Habitacion h0, h1, h2;
+	public Habitacion h0, h1, h2, h999;
 	public List<Habitacion> listaH;
 	public List<Habitacion> listaHsR;
 
@@ -46,26 +38,6 @@ public class ProdutorDatosProba {
 		this.emf=(EntityManagerFactory) config.get("EMF");
 	}
 	
-	public void creaUsuariosSoltos() {
-
-		// Crea dous usuarios EN MEMORIA: u0, u1
-		// SEN entradas de log
-		
-		this.u0 = new Usuario();
-        this.u0.setNif("000A");
-        this.u0.setNome("Usuario cero");
-        this.u0.setDataAlta(LocalDate.now());
-
-        this.u1 = new Usuario();
-        this.u1.setNif("111B");
-        this.u1.setNome("Usuaria un");
-        this.u1.setDataAlta(LocalDate.now());
-
-        this.listaxeU = new ArrayList<Usuario> ();
-        this.listaxeU.add(0,u0);
-        this.listaxeU.add(1,u1);        
-
-	}
 	
 	public void listaContactos(){
 		this.contactos = new ArrayList<>();
@@ -174,9 +146,17 @@ public class ProdutorDatosProba {
 		this.h1.setTipo("individual");
 		this.h1.setEstado("libre");
 
+		this.h999 = new Habitacion();
+		this.h999.setNumero(999999999);
+		this.h999.setPlanta(999999999);
+		this.h999.setCapacidad(999999999);
+		this.h999.setTipo("en espera");
+		this.h999.setEstado("libre");
+
         this.listaH = new ArrayList<Habitacion> ();
         this.listaH.add(0,h0);
-        this.listaH.add(1,h1);      
+        this.listaH.add(1,h1);
+		this.listaH.add(2,h999);      
 
 	}
 
@@ -193,66 +173,33 @@ public class ProdutorDatosProba {
 		this.listaHsR.add(0,h2);  
 	}
 
+	public void creaHabitacionesconEmpleados() {
 
-	public void creaEntradasLogSoltas () {
+		this.creaEmpleados();
 
-		// Crea duas entradas de log EN MEMORIA: e1a, e1b
-		// Sen usuario asignado (momentaneamente)
-		
-		this.e1A=new EntradaLog();
-        this.e1A.setCodigo("E001");
-        this.e1A.setDescricion ("Modificado contrasinal por defecto");
-        this.e1A.setDataHora(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+		this.h0 = new Habitacion();
+		this.h0.setNumero(2);
+		this.h0.setPlanta(3);
+		this.h0.setCapacidad(3);
+		this.h0.setTipo("compartida");
+		this.h0.setEstado("libre");
+		this.h0.addEmpleado(e0);
+		this.h0.addEmpleado(e1);
 
-        this.e1B=new EntradaLog();
-        this.e1B.setCodigo("E002");
-        this.e1B.setDescricion ("Acceso a zona reservada");
-        this.e1B.setDataHora(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+		this.h1 = new Habitacion();
+		this.h1.setNumero(8);
+		this.h1.setPlanta(2);
+		this.h1.setCapacidad(1);
+		this.h1.setTipo("individual");
+		this.h1.setEstado("libre");
+		this.h1.addEmpleado(e0);
 
-        this.listaxeE = new ArrayList<EntradaLog> ();
-        this.listaxeE.add(0,this.e1A);
-        this.listaxeE.add(1,this.e1B);        
-
+        this.listaH = new ArrayList<Habitacion> ();
+        this.listaH.add(0,h0);
+        this.listaH.add(1,h1);
 	}
-	
-	public void creaUsuariosConEntradasLog () {
 
-		this.creaUsuariosSoltos();
-		this.creaEntradasLogSoltas();
-		
-        this.u1.engadirEntradaLog(this.e1A);
-        this.u1.engadirEntradaLog(this.e1B);
 
-	}
-	
-	public void gravaUsuarios() {
-		EntityManager em=null;
-		try {
-			em = emf.createEntityManager();
-			em.getTransaction().begin();
-
-			Iterator<Usuario> itU = this.listaxeU.iterator();
-			while (itU.hasNext()) {
-				Usuario u = itU.next();
-				em.persist(u);
-				// DESCOMENTAR SE A PROPAGACION DO PERSIST NON ESTA ACTIVADA
-				/*
-				Iterator<EntradaLog> itEL = u.getEntradasLog().iterator();
-				while (itEL.hasNext()) {
-					em.persist(itEL.next());
-				}
-				*/
-			}
-			em.getTransaction().commit();
-			em.close();
-		} catch (Exception e) {
-			if (em!=null && em.isOpen()) {
-				if (em.getTransaction().isActive()) em.getTransaction().rollback();
-				em.close();
-				throw (e);
-			}
-		}	
-	}
 
 	public void gravaEmpleados() {
 		EntityManager em=null;
@@ -376,10 +323,6 @@ public class ProdutorDatosProba {
 			em = emf.createEntityManager();
 			em.getTransaction().begin();
 			
-			Iterator <Usuario> itU = em.createNamedQuery("Usuario.recuperaTodos", Usuario.class).getResultList().iterator();
-			while (itU.hasNext()) em.remove(itU.next());
-			Iterator <EntradaLog> itL = em.createNamedQuery("EntradaLog.recuperaTodas", EntradaLog.class).getResultList().iterator();
-			while (itL.hasNext()) em.remove(itL.next());		
 			Iterator <Empleado> itE = em.createNamedQuery("Empleado.recuperaTodos", Empleado.class).getResultList().iterator();
 			while (itE.hasNext()) em.remove(itE.next());
 			Iterator <Residente> itR = em.createNamedQuery("Residente.recuperaTodos", Residente.class).getResultList().iterator();
@@ -388,8 +331,6 @@ public class ProdutorDatosProba {
 			while (itH.hasNext()) em.remove(itH.next());			
 
 			
-			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idUsuario'" ).executeUpdate();
-			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idEntradaLog'" ).executeUpdate();
 			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idPersona'" ).executeUpdate();
 			em.createNativeQuery("UPDATE taboa_ids SET ultimo_valor_id=0 WHERE nombre_id='idHabitacion'" ).executeUpdate();
 

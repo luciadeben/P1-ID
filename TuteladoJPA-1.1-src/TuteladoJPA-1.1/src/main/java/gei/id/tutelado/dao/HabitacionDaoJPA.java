@@ -164,4 +164,55 @@ public class HabitacionDaoJPA implements HabitacionDao {
 
     }
 
+    @Override
+    public List<Object[]> recuperaconTotalEmpleados() {
+        List<Object[]> habitaciones = null;
+
+        try {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            habitaciones = em.createNamedQuery("Habitacion.getEmpleadosPorHabitacion", Object[].class)
+            .getResultList();
+
+            em.getTransaction().commit();
+            em.close();
+
+        }
+        catch (Exception ex ) {
+            if (em!=null && em.isOpen()) {
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+
+        return habitaciones;
+    }
+
+    @Override
+    public List<Habitacion> recuperaHabitacionYResidente() {
+        List<Habitacion> habitaciones = null;
+
+        try {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+
+            habitaciones = em.createNamedQuery("Habitacion.recuperaConResidentes", Habitacion.class)
+            .getResultList();
+
+            em.getTransaction().commit();
+            em.close();
+
+        }
+        catch (Exception ex ) {
+            if (em!=null && em.isOpen()) {
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                em.close();
+                throw(ex);
+            }
+        }
+
+        return habitaciones;
+    }
 }

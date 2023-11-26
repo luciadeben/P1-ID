@@ -2,11 +2,14 @@ package gei.id.tutelado;
 
 import gei.id.tutelado.configuracion.ConfiguracionJPA;
 import gei.id.tutelado.configuracion.Configuracion;
+import gei.id.tutelado.dao.EmpleadoDao;
+import gei.id.tutelado.dao.EmpleadoDaoJPA;
 import gei.id.tutelado.dao.HabitacionDao;
 import gei.id.tutelado.dao.HabitacionDaoJPA;
 import gei.id.tutelado.dao.ResidenteDao;
 import gei.id.tutelado.dao.ResidenteDaoJPA;
 import gei.id.tutelado.model.Empleado;
+import gei.id.tutelado.model.Habitacion;
 import gei.id.tutelado.model.Residente;
 
 //import org.apache.log4j.Logger;
@@ -39,6 +42,7 @@ public class T05_Consultas_Comprobaciones {
     private static Configuracion cfg;
     private static HabitacionDao habDao;
     private static ResidenteDao resDao;
+    private static EmpleadoDao empDao;
 
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -71,6 +75,8 @@ public class T05_Consultas_Comprobaciones {
         resDao = new ResidenteDaoJPA();
         resDao.setup(cfg);
         resDao.setupRes(cfg);
+        empDao = new EmpleadoDaoJPA();
+        empDao.setup(cfg);
 
         produtorDatos = new ProdutorDatosProba();
         produtorDatos.Setup(cfg);
@@ -171,5 +177,131 @@ public class T05_Consultas_Comprobaciones {
         Assert.assertEquals(produtorDatos.r0, listaR.get(0));
 
     }
+
+    @Test
+    public void test04_HabitacionResidente() {
+        List<Habitacion> listaAux;
+
+        log.info("");
+        log.info(
+                "Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaHabitaciones();
+        produtorDatos.creaHabitacionessinResidentes();
+        produtorDatos.creaResidentes();
+        produtorDatos.gravaResidentes();
+        produtorDatos.gravaHabitacionessinR();
+
+        log.info("");
+        log.info(
+                "Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da consulta Residente.recuperaHabitacion\n");
+
+        // Situación de partida:
+        // u1, e1A, e1B desligados
+
+        listaAux = habDao.recuperaHabitacionYResidente();
+        Assert.assertEquals(produtorDatos.h0, listaAux.get(0));
+        Assert.assertTrue(listaAux.get(0).getResidente().contains(produtorDatos.r0));
+
+        Assert.assertEquals(produtorDatos.h1, listaAux.get(1));
+        Assert.assertTrue(listaAux.get(1).getResidente().contains(produtorDatos.r1));
+
+        Assert.assertEquals(produtorDatos.h2, listaAux.get(2));
+        Assert.assertTrue(listaAux.get(2).getResidente().isEmpty());
+
+    }
+
+    @Test
+    public void test05_HabitaciontotalEmp() {
+
+        List<Object[]> listaAux;
+
+        log.info("");
+        log.info(
+                "Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaHabitacionesconEmpleados();
+        produtorDatos.creaHabitacionessinResidentes();
+        produtorDatos.gravaHabitaciones();
+        produtorDatos.gravaHabitacionessinR();
+
+        log.info("");
+        log.info(
+                "Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da consulta Residente.recuperaHabitacion\n");
+
+        // Situación de partida:
+        // u1, e1A, e1B desligados
+
+        listaAux = habDao.recuperaconTotalEmpleados();
+        Assert.assertEquals(produtorDatos.h1, listaAux.get(0)[0]);
+        Assert.assertEquals(1L, listaAux.get(0)[1]);
+
+        Assert.assertEquals(produtorDatos.h2, listaAux.get(1)[0]);
+        Assert.assertEquals(0L, listaAux.get(1)[1]);
+
+        Assert.assertEquals(produtorDatos.h0, listaAux.get(2)[0]);
+        Assert.assertEquals(2L, listaAux.get(2)[1]);
+    }
+
+    @Test
+    public void test06_BorraHConResidentes() {
+
+
+        log.info("");
+        log.info(
+                "Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaHabitaciones();
+        produtorDatos.creaResidentes();
+        produtorDatos.gravaResidentes();
+
+        log.info("");
+        log.info(
+                "Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da consulta Residente.recuperaHabitacion\n");
+
+        // Situación de partida:
+        // u1, e1A, e1B desligados
+
+        Assert.assertNotNull(habDao.recuperaPorNumero(produtorDatos.h0.getNumero()));  
+        produtorDatos.h0.desvincularResidentes(produtorDatos.h999);
+        resDao.modifica(produtorDatos.r0);   
+        habDao.elimina(produtorDatos.h0);
+        Assert.assertNull(habDao.recuperaPorNumero(produtorDatos.h0.getNumero()));
+    }
+
+    @Test
+    public void test07_BorraEmpleadoasoHabitacion() {
+
+
+        log.info("");
+        log.info(
+                "Configurando situación de partida do test -----------------------------------------------------------------------");
+
+        produtorDatos.creaHabitacionesconEmpleados();
+        produtorDatos.gravaHabitaciones();
+
+        log.info("");
+        log.info(
+                "Inicio do test --------------------------------------------------------------------------------------------------");
+        log.info("Obxectivo: Proba da consulta Residente.recuperaHabitacion\n");
+
+        // Situación de partida:
+        // u1, e1A, e1B desligados
+
+        Assert.assertNotNull(empDao.recuperaPorNif(produtorDatos.e0.getNif()));
+        for(int i=0;i<produtorDatos.listaH.size();i++){
+                if(produtorDatos.listaH.get(i).getEmpleado().contains(produtorDatos.e0)){
+                     produtorDatos.listaH.get(i).removeEmpleado(produtorDatos.e0);           
+                     habDao.modifica(produtorDatos.listaH.get(i));
+                }
+        }    
+        empDao.elimina(produtorDatos.e0);
+        Assert.assertNull(empDao.recuperaPorNif(produtorDatos.e0.getNif()));
+    }    
+
+
     
 }

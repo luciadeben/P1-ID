@@ -76,7 +76,7 @@ public class Residente extends Persona {
     public void setHabitacion(Habitacion habitacion) {
         if(habitacion!=null){
             if(this.habitacion!=null){
-                this.habitacion.removeResidente(this);
+                this.habitacion.getResidente().remove(this);
             }
             this.habitacion = habitacion;
             habitacion.addResidente(this);

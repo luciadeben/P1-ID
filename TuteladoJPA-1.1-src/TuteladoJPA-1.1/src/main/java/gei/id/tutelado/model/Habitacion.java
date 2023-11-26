@@ -12,11 +12,14 @@ initialValue=0, allocationSize=1)
 
 @NamedQueries ({
         @NamedQuery (name="Habitacion.recuperaPorNumero",
-                query="SELECT h FROM Habitacion h where h.numero=:numero"),
-        @NamedQuery (name="Habitacion.recuperaConEmpleados",
-                query="SELECT h FROM Habitacion h LEFT JOIN FETCH h.empleados WHERE h.numero = :numero"),        
+                query="SELECT h FROM Habitacion h LEFT JOIN FETCH h.residentes where h.numero=:numero"),
         @NamedQuery (name="Habitacion.recuperaTodos",
-                query="SELECT h FROM Habitacion h ORDER BY h.numero")
+                query="SELECT h FROM Habitacion h ORDER BY h.numero"),
+        @NamedQuery(name = "Habitacion.getEmpleadosPorHabitacion",
+                query = "SELECT habitacion, COUNT(empleado) FROM Habitacion habitacion LEFT JOIN habitacion.empleados empleado GROUP BY habitacion.id"),
+        @NamedQuery(name = "Habitacion.recuperaConResidentes",
+                query = "SELECT h FROM Habitacion h LEFT JOIN FETCH h.residentes")    
+
 })
 
 @Entity
@@ -39,11 +42,15 @@ public class Habitacion {
     private String tipo;
 
     @ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn (nullable=false, unique=false)
+    @JoinTable(
+       name = "habitacion_empleado",  // Nombre de la tabla intermedia
+        joinColumns = @JoinColumn(name = "habitacion_id"),  // Columna que hace referencia a Habitacion
+        inverseJoinColumns = @JoinColumn(name = "empleado_id")  // Columna que hace referencia a Empleado
+    )
     private Set<Empleado> empleados;
     //rivate String empleados;
 
-    @OneToMany(fetch=FetchType.EAGER, mappedBy = "habitacion", cascade={CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "habitacion", cascade={CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Residente> residentes;
     //private String residentes
 
@@ -62,14 +69,6 @@ public class Habitacion {
         }
 	}
     
-    public void removeResidente(Residente residente) {
-        if (this.residentes.size() == 0) {
-            throw new RuntimeException("La habitación no tiene residentes para eliminar");
-        }
-        residente.setHabitacion(null);
-        this.residentes.remove(residente);
-    }
-    
     public void addEmpleado(Empleado empleado){
         if(empleados==null){
             this.empleados = new HashSet<>();
@@ -78,7 +77,7 @@ public class Habitacion {
     }
          
     public void removeEmpleado(Empleado empleado) {
-	if (this.residentes.size() == 0) {
+	if (this.empleados.size() == 0) {
         throw new RuntimeException("La habitación no tiene empleados para eliminar");
        }
         this.empleados.remove(empleado);
@@ -146,6 +145,15 @@ public class Habitacion {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public void desvincularResidentes(Habitacion habitacion) {
+        if (residentes != null) {
+            for (Residente residente : residentes) {
+                residente.setHabitacion(habitacion);
+                this.residentes.remove(residente);
+            }
+        }
     }
 
     @Override
