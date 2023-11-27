@@ -370,7 +370,7 @@ public class T05_Consultas_Comprobaciones {
 
         r = (Residente) resDao.recuperaPorNif(produtorDatos.r0.getNif());
         try {
-        	Assert.assertNull(r.getHabitacion());
+                Assert.assertEquals(r.getHabitacion(), produtorDatos.r0.getHabitacion());
         	excepcion=false;
     	} catch (Exception ex) {
     		excepcion=true;
@@ -380,7 +380,7 @@ public class T05_Consultas_Comprobaciones {
 
         r = (Residente) resDao.recuperaConHabitacion(produtorDatos.r0);
         try {
-        	Assert.assertNotNull(r.getHabitacion());
+        	Assert.assertEquals(r.getHabitacion(), produtorDatos.r0.getHabitacion());
         	excepcion=false;
     	} catch (Exception ex) {
     		excepcion=true;
